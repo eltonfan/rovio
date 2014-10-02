@@ -1,0 +1,1534 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HttpServer.Mvc</name>
+    </assembly>
+    <members>
+        <member name="T:HttpServer.Mvc.Views.IViewEngine">
+            <summary>
+            View engine
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.IViewEngine.Render(HttpServer.Mvc.Controllers.IControllerContext,HttpServer.Mvc.IViewData,System.IO.TextWriter)">
+            <summary>
+            Create a view.
+            </summary>
+            <param name="context">Request and controller information.</param>
+            <param name="viewData">Information that is used in the view</param>
+            <param name="writer">Write the view using this writer.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.Views.IViewEngine.FileExtension">
+            <summary>
+            Gets file extension used by engine.
+            </summary>
+            <remarks>
+            File extension should not contain a dot.
+            </remarks>
+        </member>
+        <member name="T:HttpServer.Mvc.BootStrapper">
+            <summary>
+            Helper to make it easier to setup a MVC web server.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.BootStrapper.#ctor(HttpServer.Mvc.MvcServer)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.BootStrapper"/> class.
+            </summary>
+            <param name="server">The server.</param>
+        </member>
+        <member name="M:HttpServer.Mvc.BootStrapper.LoadControllers(System.Reflection.Assembly[])">
+            <summary>
+            Add all controllers found in the specified assemblies.
+            </summary>
+            <param name="assemblies">Assemblies to search</param>
+        </member>
+        <member name="M:HttpServer.Mvc.BootStrapper.LoadControllers(System.Reflection.Assembly)">
+            <summary>
+            Add all controllers found in the specified assembly.
+            </summary>
+            <param name="assembly"></param>
+            <remarks>It will also look for views in a subfolder to the controller.</remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.BootStrapper.LoadEmbeddedViews(System.Reflection.Assembly)">
+            <summary>
+            Add views embedded in the assembly.
+            </summary>
+            <param name="assembly">Assembly that the views are located in.</param>
+            <remarks>
+            Will look after views that has the name "*.Views.[Controller].[ActioName].*",
+            "*.[Controller].Views.[ActionName].*" and "*.Shared.[LayoutName].*"
+            </remarks>
+        </member>
+        <member name="T:HttpServer.Mvc.ActionResults.JavascriptAlert">
+            <summary>
+            Encodes message and displays a JavaScript alert.
+            </summary>
+            <remarks>
+            <para>Typical usage is as a response to a Ajax request.</para>
+            <para>Content-type will be set to <c>application/javascript</c></para>
+            </remarks>
+        </member>
+        <member name="T:HttpServer.Mvc.IActionResult">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.JavascriptAlert.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ActionResults.JavascriptAlert"/> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.ActionResults.JavascriptAlert.Message">
+            <summary>
+            Gets message to display
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.Controllers.IControllerDirector">
+            <summary>
+            Takes care of all controller processing.
+            </summary>
+            <remarks>
+            A controller director is responsible of invoking the correct method in a controller
+            and return the result. In this way we can have numerous of different controller
+            implementations in the system. Is up to each controller director type to create
+            and maintain controllers.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.IControllerDirector.GetRoutes">
+            <summary>
+            Get all routings
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.IControllerDirector.Process(HttpServer.Mvc.Controllers.IControllerContext,HttpServer.Mvc.Controller@)">
+            <summary>
+            Process controller request.
+            </summary>
+            <param name="context">Controller context</param>
+            <param name="controller">Controller used to process request</param>
+            <returns>Action result.</returns>
+            <exception cref="T:HttpServer.NotFoundException"><c>NotFoundException</c>.</exception>
+            <exception cref="T:System.InvalidOperationException">Specified URI is not for this controller.</exception>
+            <remarks>
+            Controller is returned as a parameter to let us be able to use it as a variable
+            in the view. It's recommended that you call <see cref="M:HttpServer.Mvc.Controllers.IControllerDirector.Enqueue(HttpServer.Mvc.Controller)"/> when rendering is complete (or if an exception
+            is thrown) to let the controller get reused.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.IControllerDirector.Enqueue(HttpServer.Mvc.Controller)">
+            <summary>
+            Enqueue a used controller.
+            </summary>
+            <param name="controller">Controller to enqueue</param>
+        </member>
+        <member name="E:HttpServer.Mvc.Controllers.IControllerDirector.InvokingAction">
+            <summary>
+            Raised before a controller action is invoked.
+            </summary>
+            <remarks>Use it to invoke any controller initializations in your application.</remarks>
+        </member>
+        <member name="T:HttpServer.Mvc.ServiceResolver">
+            <summary>
+            Implement the IServiceResolver interface to get support for IoC.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ServiceResolver.Assign(HttpServer.Mvc.IServiceResolver)">
+            <summary>
+            Assign your own implementation
+            </summary>
+            <param name="factory">Factory to use</param>
+        </member>
+        <member name="P:HttpServer.Mvc.ServiceResolver.Current">
+            <summary>
+            Gets current implementation
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.ControllerEventArgs">
+            <summary>
+            Controller is about to be invoked, or have been invoked.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ControllerEventArgs.#ctor(HttpServer.Mvc.Controller,System.String,HttpServer.RequestContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ControllerEventArgs"/> class.
+            </summary>
+            <param name="controller">The controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="requestContext">The request context.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.ControllerEventArgs.ActionName">
+            <summary>
+            Gets requested action.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.ControllerEventArgs.Controller">
+            <summary>
+            Gets requested controller.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.ControllerEventArgs.RequestContext">
+            <summary>
+            Gets request context.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.Views.TinyViewEngine">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyViewEngine.#ctor(HttpServer.Resources.ResourceProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.Views.TinyViewEngine"/> class.
+            </summary>
+            <param name="provider">The provider.</param>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyViewEngine.CreateView(HttpServer.Mvc.Controllers.IControllerContext,HttpServer.Mvc.IViewData)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyViewEngine.Parse(System.IO.TextReader,System.Text.StringBuilder)">
+            <summary>
+            Parse a file and convert into to our own template object code.
+            </summary>
+            <param name="reader">A text reader containing our template</param>
+            <param name="sb">String builder that the code is appended to</param>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyViewEngine.RenderLayout(System.IO.TextWriter,HttpServer.Mvc.Controllers.IControllerContext,System.IO.MemoryStream,System.String)">
+            <summary>
+            Render a layout
+            </summary>
+            <param name="writer">Writer to render to.</param>
+            <param name="context">Controller context.</param>
+            <param name="stream">Stream containing view data.</param>
+            <param name="layoutName">Preferred layout, file extension is excluded.</param>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyViewEngine.Render(HttpServer.Mvc.Controllers.IControllerContext,HttpServer.Mvc.IViewData,System.IO.TextWriter)">
+            <summary>
+            Create a view.
+            </summary>
+            <param name="context">Request and controller information.</param>
+            <param name="viewData">Information that is used in the view</param>
+            <param name="writer">Write the view using this writer.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.Views.TinyViewEngine.FileExtensions">
+            <summary>
+            Gets a list of file extensions that this engine use.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Views.TinyViewEngine.FileExtension">
+            <summary>
+            Gets file extension used by engine.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.Views.IView">
+            <summary>
+            View to render.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.IView.Render(System.IO.TextWriter,HttpServer.Mvc.IViewData)">
+            <summary>
+            Write view information
+            </summary>
+            <param name="writer">Writer that view is written to</param>
+            <param name="viewData">View data</param>
+        </member>
+        <member name="T:HttpServer.Mvc.Views.IResourceProvider">
+            <summary>
+            Loads resources to view engines.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.MvcServer">
+            <summary>
+            MVC web server.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.MvcServer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.MvcServer"/> class.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.MvcServer.Add(HttpServer.Mvc.Controller)">
+            <summary>
+            Add a controller.
+            </summary>
+            <param name="controller"></param>
+        </member>
+        <member name="M:HttpServer.Mvc.MvcServer.Process(HttpServer.RequestContext)">
+            <summary>
+            Process a request.
+            </summary>
+            <param name="context">Request information</param>
+            <returns>What to do next.</returns>
+        </member>
+        <member name="P:HttpServer.Mvc.MvcServer.ActionProvider">
+            <summary>
+            Gets all action handlers.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.MvcServer.CurrentMvc">
+            <summary>
+            Gets current web server
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.MvcServer.ViewEngines">
+            <summary>
+            Gets view engine collection.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.MvcServer.ViewProvider">
+            <summary>
+            Gets view provider.
+            </summary>
+        </member>
+        <member name="E:HttpServer.Mvc.MvcServer.InvokingAction">
+            <summary>
+            Raised before a controller action is invoked.
+            </summary>
+            <remarks>Use it to invoke any controller initializations you might need to do.</remarks>
+        </member>
+        <member name="T:HttpServer.Mvc.ActionResults.StringContent">
+            <summary>
+            Got the whole body in a string.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.StringContent.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ActionResults.StringContent"/> class.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.StringContent.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ActionResults.StringContent"/> class.
+            </summary>
+            <param name="body">The body.</param>
+            <exception cref="T:System.ArgumentNullException"><c>body</c> is <c>null</c>.</exception>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.StringContent.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ActionResults.StringContent"/> class.
+            </summary>
+            <param name="contentType">Type of content.</param>
+            <param name="body">The body.</param>
+            <exception cref="T:System.ArgumentNullException"><c>body</c> is <c>null</c>.</exception>
+        </member>
+        <member name="P:HttpServer.Mvc.ActionResults.StringContent.Body">
+            <summary>
+            Gets or sets body content.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.ActionResults.StringContent.ContentType">
+            <summary>
+            Gets or sets content type.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.ActionMappingException">
+            <summary>
+            Failed to map a controller action.
+            </summary>
+            <remarks>
+            Thrown when controllers are being wired during startup.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionMappingException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ActionMappingException"/> class.
+            </summary>
+            <param name="errorMsg">The error MSG.</param>
+        </member>
+        <member name="T:HttpServer.Mvc.SimpleFactoryResolver">
+            <summary>
+            Use this one to get the old functionality.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.IServiceResolver">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.IViewContext">
+            <summary>
+            Information needed by view engines to be able to render correctly.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.IViewContext.Controller">
+            <summary>
+            Gets executing controller.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.IViewContext.LayoutName">
+            <summary>
+            Gets layout to render view in.
+            </summary>
+            <remarks>
+            Empty if a Layout should not be used. Controllers will automatically
+            remove layout name if Ajax requests are used.
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.IViewContext.ViewName">
+            <summary>
+            Gets view to render.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.Views.TinyEngine.MyView">
+            <summary>
+            Not completed.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.Views.TinyEngine.TinyView">
+            <summary>
+            View in <see cref="T:HttpServer.Mvc.Views.TinyViewEngine"/>.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyEngine.TinyView.Render(System.IO.TextWriter,HttpServer.Mvc.IViewData)">
+            <summary>
+            Render view into the supplied text writer.
+            </summary>
+            <param name="writer">Text writer to render in.</param>
+            <param name="viewData">Supplied view data</param>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyEngine.MyView.Render(System.IO.TextWriter,HttpServer.Mvc.IViewData)">
+            <summary>
+            Render view into the supplied text writer.
+            </summary>
+            <param name="writer">Text writer to render in.</param>
+            <param name="viewData">Supplied view data</param>
+        </member>
+        <member name="T:HttpServer.Mvc.ViewDependencyAttribute">
+            <summary>
+            Add a view dependency
+            </summary>
+            <remarks>
+            Tag a controller or action with this attribute to add
+            a view dependency to the specified type.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.ViewDependencyAttribute.#ctor(System.Type)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ViewDependencyAttribute"/> class.
+            </summary>
+            <param name="type">The type.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.ViewDependencyAttribute.Type">
+            <summary>
+            Gets type that the view is dependent of.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.ViewDataDictionary">
+            <summary>
+            Dictionary containing view data information
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ViewDataDictionary.Add(System.String,System.Object)">
+            <summary>
+            Add an item
+            </summary>
+            <param name="name">Name of item</param>
+            <param name="value">Item</param>
+            <remarks>
+            Another item with the same name must not exist in the collection.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.ViewDataDictionary.TryGetValue(System.String,System.Object@)">
+            <summary>
+            Try get an item
+            </summary>
+            <param name="name">Name of item</param>
+            <param name="value">Item</param>
+            <returns><c>true</c> if found; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:HttpServer.Mvc.ViewDataDictionary.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+            </returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:HttpServer.Mvc.ViewDataDictionary.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:HttpServer.Mvc.ViewDataDictionary.Clear">
+            <summary>
+            Remove everything from the dictionary.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ViewDataDictionary.Contains(System.String)">
+            <summary>
+            Checks if view data contains a parameter.
+            </summary>
+            <param name="key">Parameter key</param>
+            <returns><c>true</c> if found; otherwise <c>false</c>.</returns>        
+        </member>
+        <member name="P:HttpServer.Mvc.ViewDataDictionary.Item(System.String)">
+            <summary>
+            Gets or sets an item in the view data.
+            </summary>
+            <param name="name">Name of item</param>
+            <returns>Item if found; otherwise <c>null</c>.</returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Routing.RoutingService.RegisterController(System.Type)">
+            <summary>
+            Find controller name (that are used when routing requests)
+            </summary>
+            <param name="type">Controller type</param>
+        </member>
+        <member name="T:HttpServer.Mvc.ActionResults.Redirect">
+            <summary>
+            Redirect to another page.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.Redirect.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ActionResults.Redirect"/> class.
+            </summary>
+            <param name="uri">Uri to redirect to.</param>
+            <remarks>
+            Include "http://" in URI to redirect to another site.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.Redirect.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ActionResults.Redirect"/> class.
+            </summary>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.ActionResults.Redirect.Location">
+            <summary>
+            Gets location to redirect to.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.Controllers.ValidForAttribute">
+            <summary>
+            Action is valid for specific HTTP methods.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ValidForAttribute.Method">
+            <summary>
+            Methods that this action is valid for.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.Routing.IRoute">
+            <summary>
+            Route reques to a controller.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Routing.IRoute.RouteRequest(HttpServer.Mvc.Routing.RoutingContext)">
+            <summary>
+            Route the HTTP request
+            </summary>
+            <param name="context">Context information</param>
+            <returns>Type if controller was found; otherwise null.</returns>
+        </member>
+        <member name="T:HttpServer.Mvc.LayoutAttribute">
+            <summary>
+            Defines which layout (master page in ASP) that the action or controller should use.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.LayoutAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.LayoutAttribute"/> class.
+            </summary>
+            <param name="name">Name of layout.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.LayoutAttribute.Name">
+            <summary>
+            Gets name of layout
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.DefaultActionAttribute">
+            <summary>
+            Default action in a controller.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.ActionResults.StreamResult">
+            <summary>
+            Sends a stream to the client
+            </summary>
+            <remarks>
+            Stream.Length must be correct in order for this action to work properly.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.StreamResult.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ActionResults.StreamResult"/> class.
+            </summary>
+            <param name="stream">The stream.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.ActionResults.StreamResult.Stream">
+            <summary>
+            Gets stream to send
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.ActionResults.BinaryResult">
+            <summary>
+            Send back a binary buffer. 
+            </summary>
+            <remarks>
+            Content-Type will be set to <c>application/octet-stream</c> if it has not been specified.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.BinaryResult.#ctor(System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ActionResults.BinaryResult"/> class.
+            </summary>
+            <param name="buffer">The buffer.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.ActionResults.BinaryResult.Buffer">
+            <summary>
+            Gets buffer to send
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.ActionResultProvider">
+            <summary>
+            Provides action results to 
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResultProvider.Register``1(HttpServer.Mvc.ActionHandler)">
+            <summary>
+            Register a new action processor.
+            </summary>
+            <typeparam name="T">Type of action to handle.</typeparam>
+            <param name="handler">Delegate processing the action</param>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResultProvider.Invoke(HttpServer.RequestContext,HttpServer.Mvc.IActionResult)">
+            <summary>
+            Invoke action
+            </summary>
+            <param name="context">Action context</param>
+            <param name="action">Action to invoke.</param>
+            <exception cref="T:System.NotSupportedException">No registered handler for the specified action type.</exception>
+        </member>
+        <member name="T:HttpServer.Mvc.ActionHandler">
+            <summary>
+            Used by <see cref="T:HttpServer.Mvc.ActionResultProvider"/>
+            </summary>
+            <param name="context">Request context</param>
+            <param name="action">Action to process</param>
+        </member>
+        <member name="T:HttpServer.Mvc.ControllerNameAttribute">
+            <summary>
+            To use another name than the class name
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ControllerNameAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ControllerNameAttribute"/> class.
+            </summary>
+            <param name="name">Controller name.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.ControllerNameAttribute.Name">
+            <summary>
+            Gets controller name.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.ControllerUriAttribute">
+            <summary>
+            To use another name than the class name
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ControllerUriAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ControllerUriAttribute"/> class.
+            </summary>
+            <param name="uri">Uri to controller.</param>
+            <remarks>
+            The uri can either be controller name, or a nested uri such as "/admin/user/". You
+            can still have a "admin" controller, but it may not contain an action called "/user/".
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.ControllerUriAttribute.Uri">
+            <summary>
+            Gets controller uri.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.Controllers.ControllerDirector">
+            <summary>
+            Takes care of all controller routing
+            </summary>
+            <remarks>
+            Default implementation. Handles all controllers derived from <see cref="T:HttpServer.Mvc.Controller"/>.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerDirector.#ctor(HttpServer.Mvc.Controller)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.Controllers.ControllerDirector"/> class.
+            </summary>
+            <param name="controller">Controller to handle.</param>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerDirector.CanProcess(HttpServer.Mvc.Controllers.ControllerContext)">
+            <summary>
+            Determines if this controller director can process the specified context.
+            </summary>
+            <param name="context">Context being processed.</param>
+            <returns><c>true</c> if this director should process the context; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerDirector.CheckIfDefaultMethod(System.Reflection.MethodInfo)">
+            <summary>
+            Check if a method is tagged with default attribute.
+            </summary>
+            <param name="methodInfo">Method to check</param>
+            <exception cref="T:HttpServer.Mvc.ActionMappingException">Default method have already been specified.</exception>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerDirector.CreateController">
+            <summary>
+            Get a cached controller or create a new one.
+            </summary>
+            <returns></returns>
+            <remarks>
+            We need to have one controller per simultaneous request since
+            all properties used in the controller will otherwise get overwritten
+            each time a new request is invoked.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerDirector.FindControllerName(System.Type)">
+            <summary>
+            Find controller name (that are used when routing requests)
+            </summary>
+            <param name="type">Controller type</param>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerDirector.InvokeEvent(HttpServer.Mvc.Controller,System.Reflection.MethodInfo,HttpServer.RequestContext)">
+            <summary>
+            Trigger the InvokingAction event.
+            </summary>
+            <param name="controller"></param>
+            <param name="method"></param>
+            <param name="context"></param>
+            <remarks>
+            <para>
+            We need to capture all exceptions since we have no control
+            over what the event subscribers do, and we do not want the 
+            whole server to crash because of an unhandled exception.
+            </para>
+            <para>
+            HttpExceptions are a different story since they are handled
+            in a lower level in the framework.
+            </para>
+            </remarks>
+            <exception cref="T:System.Exception">A HTTP exception has been thrown by an event subscriber.</exception>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerDirector.MapMethod(System.Reflection.MethodInfo)">
+            <summary>
+            Map methods to actions.
+            </summary>
+            <param name="info">Method to inspect.</param>
+            <remarks>Goes through all custom action attributes to check which HTTP methods
+            the action is valid for.</remarks>
+            <exception cref="T:HttpServer.Mvc.ActionMappingException">Mapping collision. Do not both suffix methods with a verb and use ValidFor attribute.</exception>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerDirector.TryGetVerb(System.String@,System.String@)">
+            <summary>
+            Get handler for a specific verb.
+            </summary>
+            <param name="name">Method name (should be prefixed with verb)</param>
+            <param name="verb">Verb to get</param>
+            <returns>Method.Unknown if verb could not be found.</returns>
+            <remarks>
+            Since we can map different HTTP verbs to different methods,
+            we need to check if only one or multiple methods have been mapped
+            to an action.
+            </remarks>
+            <example>
+            <code>
+            string name = "ViewPost";
+            Method method;
+            director.TryGetVerb(ref name, out method);
+            </code>
+            </example>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerDirector.GetRoutes">
+            <summary>
+            Get all routings
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerDirector.Process(HttpServer.Mvc.Controllers.IControllerContext,HttpServer.Mvc.Controller@)">
+            <summary>
+            Process controller request.
+            </summary>
+            <param name="context">Controller context</param>
+            <param name="controller">Controller used to process request</param>
+            <returns>Action result.</returns>
+            <exception cref="T:HttpServer.NotFoundException"><c>NotFoundException</c>.</exception>
+            <exception cref="T:System.InvalidOperationException">Specified URI is not for this controller.</exception>
+            <remarks>
+            Controller is returned as a parameter to let us be able to use it as a variable
+            in the view. It's VERY important <see cref="M:HttpServer.Mvc.Controllers.ControllerDirector.Enqueue(HttpServer.Mvc.Controller)"/> is called when rendering is complete (or if an exception
+            is thrown).
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerDirector.Enqueue(HttpServer.Mvc.Controller)">
+            <summary>
+            Enqueue a used controller.
+            </summary>
+            <param name="controller">Controller to enqueue</param>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerDirector.Uri">
+            <summary>
+            Gets controller uri
+            </summary>
+        </member>
+        <member name="E:HttpServer.Mvc.Controllers.ControllerDirector.InvokingAction">
+            <summary>
+            Raised before a controller action is invoked.
+            </summary>
+            <remarks>Use it to invoke any controller initializations you might need to do.</remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerDirector.MethodMapping.IsMethodsSpecified">
+            <summary>
+            Gets or sets if HTTP methods are specified.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.ActionResults.SoftRedirect">
+            <summary>
+            Soft redirects are used to request another resource 
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.Views.TinyEngine.Compiler">
+            <summary>
+            A general code compiler used to compile objects at runtime.
+            </summary>
+            <remarks>
+            This class is NOT thread safe.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyEngine.Compiler.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.Views.TinyEngine.Compiler"/> class.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyEngine.Compiler.Add(System.Type)">
+            <summary>
+            Add a type that is used in the generated object
+            </summary>
+            <param name="type">the type</param>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyEngine.Compiler.CheckTypes">
+            <summary>
+            Fills name spaces and assemblies with info from the added types.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyEngine.Compiler.Compile(System.String)">
+            <summary>
+            Compile the code.
+            </summary>
+            <param name="code">C# code.</param>
+            <returns>An assembly containing the compiled objects</returns>
+            <exception cref="T:System.InvalidOperationException">If compilation fails.</exception>
+            <exception cref="T:HttpServer.Mvc.Views.TinyEngine.CompilerException"><c>CompilerException</c>.</exception>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyEngine.Compiler.CreateInstance``1(System.Object[])">
+            <summary>
+            Create a new object of the specified type
+            </summary>
+            <param name="contructorArguments">Constructor parameters</param>
+            <typeparam name="T">Type of object to create</typeparam>
+            <returns>object if we could create it; otherwise null</returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyEngine.Compiler.GetTypeName(System.Type)">
+            <summary>
+            Used to get correct names for generics.
+            </summary>
+            <param name="type">Type to generate a strig name for.</param>
+            <returns>Type as a code string</returns>
+            <example>
+            <code>
+            <![CDATA[
+            string typeName = typeof(List<string>).Name; // will become: List`1
+            typeName = Compiler.GetTypeName(typeof(List<string>)); // will become: System.Collections.Generic.List<string>
+            ]]>
+            </code>
+            </example>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyEngine.Compiler.GetTypeName(System.Type,System.Boolean)">
+            <summary>
+            Used to get correct names for generics.
+            </summary>
+            <param name="type">Type to generate a strig name for.</param>
+            <param name="useFullName">true if FullName should be used (including namespace in typename)</param>
+            <returns>Type as a code string</returns>
+            <example>
+            <code>
+            <![CDATA[
+            string typeName = typeof(List<string>).Name; // will become: List`1
+            typeName = Compiler.GetTypeName(typeof(List<string>)); // will become: System.Collections.Generic.List<string>
+            ]]>
+            </code>
+            </example>
+        </member>
+        <member name="T:HttpServer.Mvc.Views.TinyEngine.CompilerException">
+            <summary>
+            Thrown if code compilation fails.
+            </summary>
+            <remarks>
+            <see cref="P:System.Exception.Data"/> contains an item called <c>code</c> which contains the compiled code.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyEngine.CompilerException.#ctor(System.String,System.CodeDom.Compiler.CompilerErrorCollection)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.Views.TinyEngine.CompilerException"/> class.
+            </summary>
+            <param name="errorMessage">The error message.</param>
+            <param name="errorCollection">A list with all compiler generated errors.</param>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.TinyEngine.CompilerException.ToString">
+            <summary>
+            Creates and returns a string representation of the current exception.
+            </summary>
+            <returns>
+            A string representation of the current exception.
+            </returns>
+            <PermissionSet>
+            	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" PathDiscovery="*AllFiles*"/>
+            </PermissionSet>
+        </member>
+        <member name="P:HttpServer.Mvc.Views.TinyEngine.CompilerException.Errors">
+            <summary>
+            A list with all compiler generated errors.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.ViewNotFoundException">
+            <summary>
+            Could not find the specified view.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ViewNotFoundException.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ViewNotFoundException"/> class.
+            </summary>
+            <param name="viewUri">The view URI.</param>
+            <param name="errorMessage">The error message.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.ViewNotFoundException.ViewUri">
+            <summary>
+            Gets URI to view that was not found.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Routing.MethodMapping.IsMethodsSpecified">
+            <summary>
+            Gets or sets if HTTP methods are specified.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.IViewData">
+            <summary>
+            Return data to a view.
+            </summary>
+            <remarks>
+            Override GetHashCode and calculate the hash code for each
+            parameter type. This is necessary to let the view engines
+            cache strongly typed views (and be able to create new versions
+            of a view if the types do not match).
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.IViewData.Contains(System.String)">
+            <summary>
+            Checks if view data contains a parameter.
+            </summary>
+            <param name="key">Parameter key</param>
+            <returns><c>true</c> if found; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:HttpServer.Mvc.IViewData.TryGetValue(System.String,System.Object@)">
+            <summary>
+            Try get a value from the dictionary.
+            </summary>
+            <param name="name">Name of parameter</param>
+            <param name="value">Value if any.</param>
+            <returns><c>true</c> if found; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:HttpServer.Mvc.IViewData.Eval(System.String)">
+            <summary>
+            Used by spark view engine.
+            </summary>
+            <param name="expression"></param>
+            <returns></returns>
+        </member>
+        <member name="P:HttpServer.Mvc.IViewData.Item(System.String)">
+            <summary>
+            Gets or sets a view data parameter.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HttpServer.Mvc.Controller">
+            <summary>
+            MVC controller.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.Controller"/> class.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.Clear">
+            <summary>
+            Clear everything from the last invocation.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.Invoke(System.String,System.String,System.Object[])">
+            <summary>
+            Invoke a method in another controller.
+            </summary>
+            <param name="controllerName">Name of controller.</param>
+            <param name="action">Action to invoke</param>
+            <param name="arguments">Parameters used by the controller.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.Redirect(System.String)">
+            <summary>
+            Redirect to a action or to an Uri.
+            </summary>
+            <param name="actionOrUri">Action name</param>
+            <returns>Result to return from the current action</returns>
+            <example>
+            <code>
+            public IActionResult View()
+            {
+              // do something
+              return Redirect("index");
+            }
+            </code>
+            </example>
+            <remarks>
+            Using http:// would redirect to external uris, using no slashes at all will redirect
+            to an action.
+            </remarks>
+            
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.Render">
+            <summary>
+            Render current action.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.Render(System.String)">
+            <summary>
+            Render a specific view.
+            </summary>
+            <param name="viewName">Name of view</param>
+            <returns><see cref="T:HttpServer.Mvc.IViewData"/> that should be returned from action.</returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.SetContext(HttpServer.Mvc.Controllers.IControllerContext)">
+            <summary>
+            Sets controller context 
+            </summary>
+            <remarks>
+            Context contains information about the current request.
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.InvokeBeforeAction(System.Reflection.MethodInfo)">
+            <summary>
+            Invoked just before actual action is invoked.
+            </summary>
+            <remarks>
+            Called before the action is invoked.
+            </remarks>
+            <returns>
+            <c>null</c> if action can be invoked; otherwise any action result.
+            </returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.BeforeAction(System.Reflection.MethodInfo)">
+            <summary>
+            Invoked just before actual action is invoked.
+            </summary>
+            <param name="method">Action method to be invoked.</param>
+            <remarks>
+            Called before the action is invoked.
+            </remarks>
+            <returns>
+            <c>null</c> if action can be invoked; otherwise any action result.
+            </returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.AfterAction(HttpServer.Mvc.IActionResult)">
+            <summary>
+            Action have been invoked
+            </summary>
+            <param name="result">Result returned by action.</param>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.TriggerOnException(System.Exception)">
+            <summary>
+            Used to be able to trigger the OnException event from controller director.
+            </summary>
+            <param name="err"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.OnException(System.Exception)">
+            <summary>
+            Invoked when an exception was thrown but not handled.
+            </summary>
+            <param name="err">thrown exception</param>
+            <returns>Action result used to provide feedback about the error to the user. Return <c>null</c> for default exception handling.</returns>
+            <remarks>Uncaught exceptions can be handled in multiple places, first in the controller, next by the HttpServer and finally by the HttpListener (from which the request origininated).
+            You can handle exceptions yourself by hooking events in the MvsServer, Server or HttpListener. You can also provide custom
+            error pages by hooking the ErrorPageRequested event in Server. 
+            </remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.Controller.Clone">
+            <summary>
+            Creates a new controller that is a clone of the current one.
+            </summary>
+            <returns>
+            A new controller.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="P:HttpServer.Mvc.Controller.ActionName">
+            <summary>
+            Gets name of requested action.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controller.ControllerUri">
+            <summary>
+            Gets controller uri
+            </summary>
+            <remarks>
+            Can be "/controllerName/" or "/section/controllerName/" depending on the <see cref="T:HttpServer.Mvc.ControllerUriAttribute"/>.
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controller.ControllerName">
+            <summary>
+            Gets or sets name of controller.
+            </summary>
+            <remarks>
+            Can be "controllerName" or "section/controllerName" depending on the <see cref="T:HttpServer.Mvc.ControllerUriAttribute"/>.
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controller.LayoutName">
+            <summary>
+            Gets or sets layout name.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controller.Title">
+            <summary>
+            Gets or sets document title.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controller.Request">
+            <summary>
+            Gets HTTP request
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controller.Response">
+            <summary>
+            Gets HTTP response.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controller.Parameters">
+            <summary>
+            Gets request parameters
+            </summary>
+            <remarks>A merged collection of Uri and Form parameters</remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controller.Form">
+            <summary>
+            Gets form parameters
+            </summary>
+            <remarks>Form parameters</remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controller.ViewData">
+            <summary>
+            View data used when rendering a view.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controller.Id">
+            <summary>
+            Gets or sets id
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.UserController.Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>
+            A new object that is a copy of this instance.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="T:HttpServer.Mvc.Controllers.IControllerContext">
+            <summary>
+            Context used during action invocation and rendering.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.IControllerContext.ActionName">
+            <summary>
+            Gets or sets action name.
+            </summary>
+            <remarks>
+            <para>
+            Will be filled in by controller director if empty (i.e. default action).
+            </para>
+            <para>
+            Controller can change it if any other action should be rendered.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.IControllerContext.ControllerName">
+            <summary>
+            Gets name of controller
+            </summary>
+            <remarks>
+            Might include slashes if the controller is a nested controller.
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.IControllerContext.ControllerUri">
+            <summary>
+            Gets or sets controller uri.
+            </summary>
+            <remarks>
+            A controller doesn't necessarily have to use the "/controllerName/" uri,
+            but can exist in sub folders like "/area/area2/controllerName". This feature
+            is controlled by the <see cref="T:HttpServer.Mvc.ControllerUriAttribute"/>.
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.IControllerContext.Item(System.String)">
+            <summary>
+            Get a parameter.
+            </summary>
+            <param name="name">Parameter name</param>
+            <returns>Parameter value if found; otherwise <c>null</c>.</returns>
+            <remarks>
+            Wrapper around query string and form values.
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.IControllerContext.LayoutName">
+            <summary>
+            Gets or sets layout to render.
+            </summary>
+            <value>
+            <c>null</c> if default layout should be used.
+            </value>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.IControllerContext.RequestContext">
+            <summary>
+            Gets current request context
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.IControllerContext.Title">
+            <summary>
+            Gets or sets document title.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.IControllerContext.Uri">
+            <summary>
+            Gets or sets requested URI.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.IControllerContext.UriSegments">
+            <summary>
+            Gets path split up on slash.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.IControllerContext.ViewPath">
+            <summary>
+            Gets or sets path and name of view to render, excluding file extension.
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.ActionResults.ExecuteJavascript">
+            <summary>
+            Send back a JavaScript and execute it.
+            </summary>
+            <remarks>
+            A JavaScript without any HTML tags should be used.
+            </remarks>
+            <example>
+            <code>
+            public class MyController : Controller
+            {
+              public IActionResult Remove()
+              {
+                //[..]
+                
+                // Update table using jQuery.
+                if (Request.IsAjax)
+                    return new ExecuteJavascript("$('.table').loadJson('/users/list/');");
+                return Redirect('/users/list/');
+              }
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.ExecuteJavascript.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.ActionResults.ExecuteJavascript"/> class.
+            </summary>
+            <param name="javaScript">JavaScript to execute. Should not be wrapped in any HTML tags.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.ActionResults.ExecuteJavascript.Value">
+            <summary>
+            Gets JavaScript to execute
+            </summary>
+        </member>
+        <member name="T:HttpServer.Mvc.Views.ViewContext">
+            <summary>
+            Information needed by view engines to be able to render correctly.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Views.ViewContext.Controller">
+            <summary>
+            Gets executing controller.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Views.ViewContext.ViewName">
+            <summary>
+            Gets view to render.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Views.ViewContext.LayoutName">
+            <summary>
+            Gets layout to render view in.
+            </summary>
+            <remarks>
+            Empty if a Layout should not be used. Controllers will automatically
+            remove layout name if Ajax requests are used.
+            </remarks>
+        </member>
+        <member name="T:HttpServer.Mvc.Views.ViewEngineCollection">
+            <summary>
+            Collection of view engines.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.ViewEngineCollection.Add(HttpServer.Mvc.Views.IViewEngine)">
+            <summary>
+            Add a engine.
+            </summary>
+            <param name="engine">Engine to add</param>
+            <exception cref="T:System.ArgumentNullException"><c>engine</c> is null.</exception>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.ViewEngineCollection.Render(System.IO.TextWriter,HttpServer.Mvc.Controllers.ControllerContext,HttpServer.Mvc.IViewData)">
+            <summary>
+            Render a view.
+            </summary>
+            <param name="writer"></param>
+            <param name="context"></param>
+            <param name="viewData"></param>
+        </member>
+        <member name="T:HttpServer.Mvc.Views.ViewData">
+            <summary>
+            View data implementation.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.ViewData.Clear">
+            <summary>
+            Remove everything from the dictionary.
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.ViewData.Eval(System.String)">
+            <summary>
+            Used by spark view engine.
+            </summary>
+            <param name="expression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.ViewData.Eval(System.String,System.String)">
+            <summary>
+            Used by spark view engine.
+            </summary>
+            <param name="expression"></param>
+            <param name="format"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.ViewData.GetHashCode">
+            <summary>
+            Serves as a hash function for a particular type.
+            </summary>
+            <returns>
+            A hash code for the current <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.ViewData.Contains(System.String)">
+            <summary>
+            Checks if view data contains a parameter.
+            </summary>
+            <param name="key">Parameter key</param>
+            <returns><c>true</c> if found; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.ViewData.TryGetValue(System.String,System.Object@)">
+            <summary>
+            Try get a value from the dictionary.
+            </summary>
+            <param name="name">Name of parameter</param>
+            <param name="value">Value if any.</param>
+            <returns>
+            	<c>true</c> if found; otherwise <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.ViewData.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+            </returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:HttpServer.Mvc.Views.ViewData.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="P:HttpServer.Mvc.Views.ViewData.Parameters">
+            <summary>
+            Get all parameters for the view.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Views.ViewData.Item(System.String)">
+            <summary>
+            Gets or sets a view data parameter.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HttpServer.Mvc.ActionResults.BuiltinActions">
+            <summary>
+            All actions that are built into the system
+            </summary>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.BuiltinActions.ProcessJavascriptAlert(HttpServer.RequestContext,HttpServer.Mvc.IActionResult)">
+            <summary>
+            Creates a javascript alert.
+            </summary>
+            <param name="context"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.BuiltinActions.ProcessRedirect(HttpServer.RequestContext,HttpServer.Mvc.IActionResult)">
+            <summary>
+            Redirects to another page.
+            </summary>
+            <param name="context"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.BuiltinActions.ProcessStringContent(HttpServer.RequestContext,HttpServer.Mvc.IActionResult)">
+            <summary>
+            Returns pure string content.
+            </summary>
+            <param name="context"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.BuiltinActions.Register(HttpServer.Mvc.ActionResultProvider)">
+            <summary>
+            Register all our actions.
+            </summary>
+            <param name="provider"></param>
+        </member>
+        <member name="M:HttpServer.Mvc.ActionResults.BuiltinActions.ProcessExecuteJavascript(HttpServer.RequestContext,HttpServer.Mvc.IActionResult)">
+            <summary>
+            Sets Content-Type to "application/javascript" and sends the java script as the body.
+            </summary>
+            <param name="context"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HttpServer.Mvc.Controllers.ControllerContext">
+            <summary>
+            Context used in controllers.
+            </summary>
+            <remarks>A context is used in the controller instead of having to set a lot
+            of controller properties each time a new request is about to be processed.
+            In this way it's up to the controller creator do decide with which parameters
+            that should be exposed to the developer.</remarks>
+        </member>
+        <member name="M:HttpServer.Mvc.Controllers.ControllerContext.#ctor(HttpServer.RequestContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HttpServer.Mvc.Controllers.ControllerContext"/> class.
+            </summary>
+            <param name="context">Request context.</param>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerContext.Controller">
+            <summary>
+            Gets or sets executing controller
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerContext.ControllerUri">
+            <summary>
+            Gets or sets controller uri.
+            </summary>
+            <value></value>
+            <remarks>
+            A controller doesn't necessarily have to use the "/controllerName/" uri,
+            but can exist in sub folders like "/area/area2/controllerName". This feature
+            is controlled by the <see cref="T:HttpServer.Mvc.ControllerUriAttribute"/>.
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerContext.ViewPath">
+            <summary>
+            Gets or sets path and name of view to render, excluding file extension.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerContext.ActionName">
+            <summary>
+            Gets or sets action name.
+            </summary>
+            <remarks>
+            Will be filled in by controller director if empty (i.e. default action).
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerContext.LayoutName">
+            <summary>
+            Gets or sets layout to render.
+            </summary>
+            <value>
+            <c>null</c> if default layout should be used.
+            </value>
+            <remarks>
+            Only specified if sets it.
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerContext.RequestContext">
+            <summary>
+            Gets the request context.
+            </summary>
+            <value>The request context.</value>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerContext.Uri">
+            <summary>
+            Gets or sets requested URI.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerContext.UriSegments">
+            <summary>
+            Gets path split up on slash.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerContext.Title">
+            <summary>
+            Gets or sets document title.
+            </summary>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerContext.ControllerName">
+            <summary>
+            Gets name of controller
+            </summary>
+            <remarks>
+            Might include slashes if the controller is a nested controller.
+            </remarks>
+        </member>
+        <member name="P:HttpServer.Mvc.Controllers.ControllerContext.Item(System.String)">
+            <summary>
+            Get a parameter.
+            </summary>
+            <param name="name">Parameter name</param>
+            <returns>Parameter value if found; otherwise <c>null</c>.</returns>
+            <remarks>
+            Wrapper around query string and form values.
+            </remarks>
+        </member>
+    </members>
+</doc>

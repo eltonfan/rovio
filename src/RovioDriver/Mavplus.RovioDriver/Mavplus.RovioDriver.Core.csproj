@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{653F3105-C5FC-489C-ADC3-491E07A53406}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mavplus.RovioDriver</RootNamespace>
+    <AssemblyName>Mavplus.RovioDriver.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\mavplus.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Debug\Mavplus.RovioDriver.Core.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Release\Mavplus.RovioDriver.Core.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="SmartThreadPool">
+      <HintPath>..\References\SmartThreadPool.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actions\BaseAction.cs" />
+    <Compile Include="Actions\MoveForward.cs" />
+    <Compile Include="Actions\Reboot.cs" />
+    <Compile Include="Actions\RestoreFactoryDefault.cs" />
+    <Compile Include="Actions\RotateLeftByDegree.cs" />
+    <Compile Include="Actions\SendAudio.cs" />
+    <Compile Include="Actions\HeadUp.cs" />
+    <Compile Include="Actions\HeadDown.cs" />
+    <Compile Include="Actions\HeadMiddle.cs" />
+    <Compile Include="Actions\HeadUpward.cs" />
+    <Compile Include="Actions\HeadDownward.cs" />
+    <Compile Include="Actions\GoHomeAndDock.cs" />
+    <Compile Include="Actions\SetBlueLights.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Actions\RotateRightByDegree.cs" />
+    <Compile Include="Actions\SetNightMode.cs" />
+    <Compile Include="Actions\Stop.cs" />
+    <Compile Include="Actions\MoveBackward.cs" />
+    <Compile Include="Actions\SetHeadLight.cs" />
+    <Compile Include="Actions\RotateLeft.cs" />
+    <Compile Include="Actions\RotateRight.cs" />
+    <Compile Include="Actions\UpdateHomePosition.cs" />
+    <Compile Include="Actions\SendMail.cs" />
+    <Compile Include="API\RovioAPI.Static.cs" />
+    <Compile Include="CameraController.cs" />
+    <Compile Include="Events\NetworkWorkerEvents.cs" />
+    <Compile Include="LogoPostions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rovio.Audio.cs" />
+    <Compile Include="Rovio.Public.Driver.cs" />
+    <Compile Include="Rovio.Public.Commander.cs" />
+    <Compile Include="RovioSettings.Mail.cs" />
+    <Compile Include="RovioSettings.Movement.cs" />
+    <Compile Include="RovioSettings.Video.cs" />
+    <Compile Include="RovioStatusReport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RovioVersionInfo.cs" />
+    <Compile Include="Rovio.Joystick.cs" />
+    <Compile Include="Rovio.Queue.cs" />
+    <Compile Include="SupportedFirmwareVersion.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\FlatTrimCommand.cs" />
+    <Compile Include="Commands\FlightModeCommand.cs" />
+    <Compile Include="Commands\FlightMoveCommand.cs" />
+    <Compile Include="Commands\HoverModeCommand.cs" />
+    <Compile Include="Commands\PlayLedAnimationCommand.cs" />
+    <Compile Include="Commands\SetConfigurationCommand.cs" />
+    <Compile Include="Commands\SetControlModeCommand.cs" />
+    <Compile Include="Commands\SwitchCameraCommand.cs" />
+    <Compile Include="Commands\WatchDogCommand.cs" />
+    <Compile Include="FlashParameterItem.cs" />
+    <Compile Include="FlashParameters.cs" />
+    <Compile Include="MailSettings.cs" />
+    <Compile Include="NetworkConfig.cs" />
+    <Compile Include="ManualController.cs" />
+    <Compile Include="MovementController.cs" />
+    <Compile Include="API\RequestItem.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\AssemblyVersion.cs">
+      <Link>Properties\AssemblyVersion.cs</Link>
+    </Compile>
+    <Compile Include="API\ResponseCodes.cs" />
+    <Compile Include="Rovio.cs" />
+    <Compile Include="Rovio.Movement.cs" />
+    <Compile Include="Rovio.Properties.cs" />
+    <Compile Include="Rovio.Public.cs" />
+    <Compile Include="API\RovioAPI.cs" />
+    <Compile Include="API\RovioAPI.DateTime.cs" />
+    <Compile Include="API\RovioAPI.Mail.cs" />
+    <Compile Include="API\RovioAPI.Network.cs" />
+    <Compile Include="API\RovioAPI.Others.cs" />
+    <Compile Include="API\RovioResponse.cs" />
+    <Compile Include="API\RovioWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RovioMcuReport.cs" />
+    <Compile Include="RovioSettings.cs" />
+    <Compile Include="RovioStatus.cs" />
+    <Compile Include="API\RovioAPI.Users.cs" />
+    <Compile Include="StatusChangedEventArgs.cs" />
+    <Compile Include="TuningParameters.cs" />
+    <Compile Include="UPnPInfo.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="WiFiMode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="rovio.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Mavplus.RovioDriver.csproj">
+      <Project>{CCC33BE7-2AF0-45FE-98FF-47EE8A60FC07}</Project>
+      <Name>Newbot.RovioDriver</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

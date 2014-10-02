@@ -1,0 +1,2790 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Mobot.Utils</name>
+    </assembly>
+    <members>
+        <member name="T:Mobot.LogWriter">
+            <summary>
+            将文本写入到TextBox。
+            </summary>
+        </member>
+        <member name="M:Mobot.LogWriter.Clear2(System.Int32)">
+            <summary>
+            清除，但保留最后10行。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Communication.ErrorReceivedEventArgs">
+            <summary>
+            为 BinaryCommunicator.ErrorReceived 事件准备数据。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Communication.ErrorReceivedEventArgs.#ctor(System.String,System.Exception)">
+            <summary>
+            
+            </summary>
+            <param name="error"></param>
+        </member>
+        <member name="P:Mobot.Utils.Communication.ErrorReceivedEventArgs.Message">
+            <summary>
+            错误的描述信息。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Communication.ErrorReceivedEventArgs.Error">
+            <summary>
+            获取关联的异常。
+            </summary>
+        </member>
+        <member name="M:Mobot.IBinaryFormattable.WriteTo(System.IO.BinaryWriter)">
+            <summary>
+            将 IBinaryFormattable 数据保存到指定的 <see cref="T:System.IO.BinaryWriter"/>。
+            </summary>
+            <param name="stream">要保存到其中的 BinaryWriter。</param>
+        </member>
+        <member name="M:Mobot.IBinaryFormattable.LoadFrom(System.IO.BinaryReader)">
+            <summary>
+            从指定的 <see cref="T:System.IO.BinaryWriter"/> 加载 IBinaryFormattable 数据。
+            </summary>
+            <param name="reader"></param>
+        </member>
+        <member name="T:Mobot.Utils.Caches.CircleCache`1">
+            <summary>
+            WritableCircleCache
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Mobot.Utils.Caches.CircleCache`1.Create(System.IO.MemoryMappedFiles.MemoryMappedFile,Mobot.DataRange,System.Int32)">
+            <summary>
+            创建缓存空间，并初始化内存结构。
+            </summary>
+            <param name="mmf"></param>
+            <param name="space"></param>
+            <param name="entryCount"></param>
+            <returns>返回该结构占用的总空间（单位为Bytes）</returns>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleCache`1.lockObj">
+            <summary>
+            同时只允许一个线程执行修改动作。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Caches.CircleCache`1.WriteEntry(System.IO.BinaryWriter,`0)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="stream">共享内存流，可读写长度为预分配的尺寸。</param>
+            <param name="data">The data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.Caches.CircleCache`1.Append(`0)">
+            <summary>
+            
+            </summary>
+            <param name="entry"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.Caches.MessageCache`1.GetSupportedMessages">
+            <summary>
+            获取受支持的所有消息类型。
+            </summary>
+            <returns>
+            Key: MessageId
+            Value: MessageType 必须从 T 派生。
+            </returns>
+        </member>
+        <member name="M:Mobot.IO.EntryFile`1.GetEntryIndex(System.DateTime,System.Int32)">
+            <summary>
+            使用二分法查找指定时间最接近的项，如果最接近的项也大于容差，则返回-1。
+            </summary>
+            <param name="timestamp"></param>
+            <param name="toleranceMS">容差，毫秒</param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.IO.EntryFile`1.GetEntries(System.DateTime,System.DateTime)">
+            <summary>
+            获取指定时间范围内的记录。
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Point2F">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Mobot.Point2F.TryParse(System.String,Mobot.Point2F@)">
+            <summary>
+            
+            </summary>
+            <param name="s"></param>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.SingleInstance">
+             <summary>
+             只启动一个应用程序实例控制类
+             From:http://blog.csdn.net/zhzuo
+             </summary>
+             <remarks>
+             使用方法示例：
+             <code>
+             static class Program
+             {
+                 /// <summary>
+                 /// 应用程序的主入口点。
+                 /// </summary>
+                 [STAThread]
+                 static void Main()
+                 {
+                     ////方法一
+                     //if (! SingleInstance.HandleRunningInstance())
+                     //    RunApplication();
+            
+                     //方法二
+                     if (SingleInstance.CreateMutex())
+                     {//是第一个进程
+                         RunApplication();
+                         SingleInstance.ReleaseMutex();
+                     }
+                     else
+                     {//不是，则试着将第一个进程显示到前台
+                         if (!SingleInstance.HandleRunningInstance())//显示失败，这只显示一条错误信息
+                             MessageBox.Show("已经有一个实例在运行中。", "提示");
+                     }
+                 }
+             
+                 /// <summary>
+                 /// 启动应用程序
+                 /// </summary>
+                 static void RunApplication()
+                 {
+                     Application.EnableVisualStyles();
+                     Application.SetCompatibleTextRenderingDefault(false);
+                     Application.Run(new MainForm());
+                 }
+             }
+             </code>
+             </remarks>
+        </member>
+        <member name="M:Mobot.SingleInstance.#cctor">
+            <summary>
+            初始化类 <see cref="T:Mobot.SingleInstance"/>。静态构造函数。
+            </summary>
+        </member>
+        <member name="M:Mobot.SingleInstance.GetRunningInstance">
+            <summary>
+            获取应用程序进程实例,如果没有匹配进程，返回Null
+            </summary>
+            <returns>返回当前Process实例</returns>
+        </member>
+        <member name="M:Mobot.SingleInstance.HandleRunningInstance(System.Diagnostics.Process)">
+            <summary>
+            获取应用程序句柄，设置应用程序前台运行，并返回bool值
+            </summary>
+        </member>
+        <member name="M:Mobot.SingleInstance.HandleRunningInstance">
+            <summary>
+            获取窗口句柄，设置应用程序前台运行，并返回bool值，重载方法
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.SingleInstance.CreateMutex">
+            <summary>
+            创建应用程序进程Mutex
+            </summary>
+            <returns>返回创建结果，true表示创建成功，false创建失败。</returns>
+        </member>
+        <member name="M:Mobot.SingleInstance.CreateMutex(System.String)">
+            <summary>
+            创建应用程序进程Mutex
+            </summary>
+            <param name="name">Mutex名称</param>
+            <returns>返回创建结果，true表示创建成功，false创建失败。</returns>
+        </member>
+        <member name="M:Mobot.SingleInstance.ReleaseMutex">
+            <summary>
+            释放Mutex
+            </summary>
+        </member>
+        <member name="M:Mobot.SingleInstance.InitRunFlag">
+            <summary>
+            初始化程序运行标志，如果设置成功，返回true，已经设置返回false，设置失败将抛出异常
+            </summary>
+            <returns>返回设置结果</returns>
+        </member>
+        <member name="M:Mobot.SingleInstance.DisposeRunFlag">
+            <summary>
+            释放初始化程序运行标志，如果释放失败将抛出异常
+            </summary>
+        </member>
+        <member name="P:Mobot.SingleInstance.RunFlag">
+            <summary>
+            获取或设置程序运行标志，必须符合Windows文件命名规范
+            这里实现生成临时文件为依据，如果修改成设置注册表，那就不需要符合文件命名规范。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Logging.ExecuteEventArgs">
+            <summary>
+            为 IEventSource.AnyEventRaised 事件提供数据。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteEventArgs.#ctor(System.String,System.String,System.String,System.DateTime)">
+            <summary>
+            初始化 BuildEventArgs 类的新实例。
+            </summary>
+            <param name="message">事件的文本。</param>
+            <param name="helpKeyword">与事件关联的“帮助”关键字。</param>
+            <param name="senderName">事件源。</param>
+            <param name="eventTimestamp">与该事件关联的日期和时间。</param>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteEventArgs.#ctor(System.String,System.String,System.String)">
+            <summary>
+            用指定的 Message、HelpKeyword 和 SenderName 值初始化 BuildEventArgs 类的新实例。
+            </summary>
+            <param name="message">事件的文本。</param>
+            <param name="helpKeyword">与事件关联的“帮助”关键字。</param>
+            <param name="senderName">事件源。</param>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteEventArgs.#ctor">
+            <summary>
+            初始化 BuildEventArgs 类的一个新实例。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteEventArgs.HelpKeyword">
+            <summary>
+            获取事件的“帮助”关键字。
+            </summary>
+            <value>事件的“帮助”关键字。</value>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteEventArgs.Message">
+            <summary>
+            获取事件的消息。
+            </summary>
+            <value>事件的消息。</value>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteEventArgs.SenderName">
+            <summary>
+            获取引发事件的 System.Object 的名称。
+            </summary>
+            <value>引发事件的 System.Object 的名称。</value>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteEventArgs.ThreadId">
+            <summary>
+            获取引发事件的线程的整数标识符。
+            </summary>
+            <value>引发事件的线程的整数标识符。</value>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteEventArgs.Timestamp">
+            <summary>
+            获取 System.DateTime 形式的事件引发时间。
+            </summary>
+            <value>System.DateTime 形式的事件引发时间。</value>
+        </member>
+        <member name="T:Mobot.StringValueAttribute">
+            <summary>
+            This attribute is used to represent a string value
+            for a value in an enum.
+            </summary>
+        </member>
+        <member name="M:Mobot.StringValueAttribute.#ctor(System.String)">
+            <summary>
+            Constructor used to init a StringValue Attribute
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="P:Mobot.StringValueAttribute.StringValue">
+            <summary>
+            Holds the stringvalue for a value in an enum.
+            </summary>
+        </member>
+        <member name="T:Mobot.EnumHelper">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Mobot.EnumHelper.GetNames(System.Type)">
+            <summary>
+            Gets the names.
+            </summary>
+            <param name="enumType">Type of the enum.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.EnumHelper.GetName(System.Type,System.Object)">
+            <summary>
+            Will get the string value for a given enums value, this will
+            only work if you assign the StringValue attribute to
+            the items in your enum.
+            </summary>
+            <param name="enumType">Type of the enum.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.EnumHelper.Parse(System.Type,System.String)">
+            <summary>
+            将一个或多个枚举常数的名称或数字值的字符串表示转换成等效的枚举对象。
+            </summary>
+            <param name="enumType">枚举的 System.Type。</param>
+            <param name="value">包含要转换的值或名称的字符串。</param>
+            <returns>enumType 类型的对象，其值由 value 表示。</returns>
+        </member>
+        <member name="M:Mobot.EnumHelper.Parse(System.Type,System.String,System.Boolean)">
+            <summary>
+            将一个或多个枚举常数的名称或数字值的字符串表示转换成等效的枚举对象。一个参数指定该操作是否区分大小写。
+            </summary>
+            <param name="enumType">枚举的 System.Type。</param>
+            <param name="value">包含要转换的值或名称的字符串。</param>
+            <param name="ignoreCase">如果为 true，则忽略大小写；否则考虑大小写。</param>
+            <returns>enumType 类型的对象，其值由 value 表示。</returns>
+        </member>
+        <member name="T:Mobot.Utils.Communication.CommandMessages.ResponseMessageId">
+            <summary>
+            服务端发出的消息。
+            </summary>
+        </member>
+        <member name="T:Mobot.RangeL">
+            <summary>
+            指一个范围。
+            </summary>
+        </member>
+        <member name="M:Mobot.RangeL.Parse(System.String)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <returns>与 s 中包含的数字等效的 32 位有符号整数。</returns>
+            <exception cref="T:System.ArgumentNullException">s 为 null。</exception>
+            <exception cref="T:System.FormatException">s 的格式不正确。</exception>
+            <exception cref="T:System.OverflowException">s 表示小于 System.Int32.MinValue 或大于 System.Int32.MaxValue 的数字。</exception>
+        </member>
+        <member name="M:Mobot.RangeL.TryParse(System.String,Mobot.RangeL@)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。一个指示转换是否成功的返回值。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <param name="result">当此方法返回时，如果转换成功，则包含与 s 所包含的数字等效的 32 位有符号整数值；如果转换失败，则包含零。如果 s 参数为 null，格式不正确，或者表示的数字小于
+            System.Int32.MinValue 或大于 System.Int32.MaxValue，则转换会失败。该参数未经初始化即被传递。</param>
+            <returns>如果 s 转换成功，则为 true；否则为 false。</returns>
+        </member>
+        <member name="M:Mobot.Point3.ToString">
+            <summary>
+            返回 (0, 0, 0) 格式的字符串。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Point2D">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Mobot.Point2D.op_Explicit(Mobot.Point2D)~System.Drawing.Point">
+            <summary>
+            Point2D -> Point 会损失精度。
+            </summary>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Point2D.TryParse(System.String,Mobot.Point2D@)">
+            <summary>
+            
+            </summary>
+            <param name="s"></param>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Point2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Logging.IEventSource">
+            <summary>
+            定义由执行引擎引发的事件。记录器接收在它们的 ILogger.Initialize(IEventSource)
+            方法中实现此接口的对象，然后使用该对象订阅它们希望接收的事件。
+            </summary>
+        </member>
+        <member name="E:Mobot.Utils.Logging.IEventSource.AnyEventRaised">
+            <summary>
+            当执行引发其他任何类型的执行事件时发生。
+            </summary>
+        </member>
+        <member name="E:Mobot.Utils.Logging.IEventSource.ErrorRaised">
+            <summary>
+            当执行引发错误时发生。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.ReadOnlyCircleCache`1.loopDelay">
+            <summary>
+            读取循环中的等待时间（毫秒）
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.ReadOnlyCircleCache`1.loopDelayWhenError">
+            <summary>
+            读取循环中，遇到读取失败的等待时间（毫秒）
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Caches.ReadOnlyCircleCache`1.ReadEntry(System.IO.BinaryReader,System.Int64)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="stream">共享内存流，可读写长度为预分配的尺寸。</param>
+            <param name="length">The length.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.Caches.ReadOnlyCircleCache`1.GetEntry(System.Int64)">
+            <summary>
+            读取数据，如果在读取过程中该数据被移除，则返回为空。
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="index"></param>
+            <param name="callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.Caches.ReadOnlyCircleCache`1.ReadEntries(System.Int32)">
+            <summary>
+            从缓存读取指定数量的
+            </summary>
+            <param name="count">指定的数量，小于等于0 则为不限数量。</param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.Caches.ReadOnlyCircleCache`1.NextEntry(System.Int32)">
+            <summary>
+            在指定时间内读取下一项。
+            </summary>
+            <param name="millisecondsTimeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.Caches.ReadOnlyCircleCache`1.ReadExisting">
+            <summary>
+            读取缓存中的所有项。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Mobot.Utils.Caches.ReadOnlyCircleCache`1.ItemRange">
+            <summary>
+            当前索引范围。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Caches.ReadOnlyCircleCache`1.NewEntryCount">
+            <summary>
+            检查未读的新纪录数量。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Caches.ReadOnlyCircleCache`1.OnlyNewEntry">
+            <summary>
+            获取或设置 是否仅读取连接上后的新记录。默认为true。
+            </summary>
+            <value>
+              如果仅读取连接后的新记录，则为<c>true</c>；否则为<c>false</c>.
+            </value>
+        </member>
+        <member name="M:Mobot.Utils.Caches.MessageReadOnlyCache`1.GetSupportedMessages">
+            <summary>
+            获取受支持的所有消息类型。
+            </summary>
+            <returns>
+            Key: MessageId
+            Value: MessageType 必须从 T 派生。
+            </returns>
+        </member>
+        <member name="T:Mobot.RectangleD">
+            <summary>
+            存储一组浮点数，共四个，表示一个矩形的位置和大小。对于更高级的区域函数，请使用 System.Drawing.Region 对象。
+            </summary>
+        </member>
+        <member name="F:Mobot.RectangleD.Empty">
+            <summary>
+            表示 System.Drawing.RectangleF 类的、其成员未被初始化的实例。
+            </summary>
+        </member>
+        <member name="M:Mobot.RectangleD.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            用指定的位置和大小初始化 System.Drawing.RectangleF 类的新实例。
+            </summary>
+            <param name="x">矩形左上角的 x 坐标。</param>
+            <param name="y">矩形左上角的 y 坐标。</param>
+            <param name="width">矩形的宽度。</param>
+            <param name="height">矩形的高度。</param>
+        </member>
+        <member name="M:Mobot.RectangleD.#ctor(System.Drawing.PointF,System.Drawing.SizeF)">
+            <summary>
+            用指定的位置和大小初始化 System.Drawing.RectangleF 类的新实例。
+            </summary>
+            <param name="location">System.Drawing.PointF，它表示矩形区域的左上角。</param>
+            <param name="size">System.Drawing.SizeF，它表示矩形区域的宽度和高度。</param>
+        </member>
+        <member name="M:Mobot.RectangleD.FromLTRB(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            创建一个 System.Drawing.RectangleF 结构，它的左上角和右下角都位于指定位置。
+            </summary>
+            <param name="left">矩形区域左上角的 x 坐标。</param>
+            <param name="top">矩形区域左上角的 y 坐标。</param>
+            <param name="right">矩形区域右下角的 x 坐标。</param>
+            <param name="bottom">矩形区域右下角的 y 坐标。</param>
+            <returns>此方法创建的新 System.Drawing.RectangleF。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.Equals(System.Object)">
+            <summary>
+            测试 obj 是否为与此 System.Drawing.RectangleF 具有相同位置和大小的 System.Drawing.RectangleF。
+            </summary>
+            <param name="obj">要测试的 System.Object。</param>
+            <returns>如果 obj 是 System.Drawing.RectangleF，并且它的 X、Y、Width 和 Height 属性与此 System.Drawing.RectangleF
+            的对应属性相等，此方法将返回 true；否则将返回 false。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.op_Equality(Mobot.RectangleD,Mobot.RectangleD)">
+            <summary>
+            测试两个 System.Drawing.RectangleF 结构的位置和大小是否相同。
+            </summary>
+            <param name="left">相等运算符左侧的 System.Drawing.RectangleF 结构。</param>
+            <param name="right">相等运算符右侧的 System.Drawing.RectangleF 结构。</param>
+            <returns>如果两个指定的 System.Drawing.RectangleF 结构具有相等的 System.Drawing.RectangleF.X、System.Drawing.RectangleF.Y、System.Drawing.RectangleF.Width
+            和 System.Drawing.RectangleF.Height 属性值，此运算符将返回 true。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.op_Inequality(Mobot.RectangleD,Mobot.RectangleD)">
+            <summary>
+            测试两个 System.Drawing.RectangleF 结构的位置或大小是否不同。
+            </summary>
+            <param name="left">不等运算符左侧的 System.Drawing.RectangleF 结构。</param>
+            <param name="right">不等运算符右侧的 System.Drawing.RectangleF 结构。</param>
+            <returns>如果两个 System.Drawing.Rectangle 结构的 System.Drawing.RectangleF.X、System.Drawing.RectangleF.Y、System.Drawing.RectangleF.Width
+            和 System.Drawing.RectangleF.Height 属性值中有任何一个不相等，此运算符将返回 true；否则将返回 false。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.Contains(System.Double,System.Double)">
+            <summary>
+            确定指定的点是否包含在此 System.Drawing.RectangleF 结构内。
+            </summary>
+            <param name="x">测试点的 X 坐标。</param>
+            <param name="y">测试点的 Y 坐标。</param>
+            <returns>如果 x 和 y 定义的点包含在此 System.Drawing.RectangleF 结构中，此方法将返回 true；否则将返回 false。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.Contains(Mobot.Point2D)">
+            <summary>
+            确定指定的点是否包含在此 System.Drawing.RectangleF 结构内。
+            </summary>
+            <param name="pt">要测试的 System.Drawing.PointF。</param>
+            <returns>如果 pt 参数表示的点包含在此 System.Drawing.RectangleF 结构中，此方法将返回 true；否则将返回 false。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.Contains(Mobot.RectangleD)">
+            <summary>
+            确定 rect 表示的矩形区域是否完全包含在此 System.Drawing.RectangleF 结构内。
+            </summary>
+            <param name="rect">要测试的 System.Drawing.RectangleF。</param>
+            <returns>如果 rect 表示的矩形区域完全包含在此 System.Drawing.RectangleF 表示的矩形区域中，此方法将返回 true；否则将返回 false。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.GetHashCode">
+            <summary>
+            获取此 System.Drawing.RectangleF 结构的哈希代码。有关如何使用哈希代码的信息，请参见 Object.GetHashCode。
+            </summary>
+            <returns>此 System.Drawing.RectangleF 的哈希代码。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.Inflate(System.Double,System.Double)">
+            <summary>
+            将此 System.Drawing.RectangleF 结构放大指定量。
+            </summary>
+            <param name="x">此 System.Drawing.RectangleF 结构的水平放大量。</param>
+            <param name="y">此 System.Drawing.RectangleF 结构的垂直放大量。</param>
+        </member>
+        <member name="M:Mobot.RectangleD.Inflate(Mobot.Size2D)">
+            <summary>
+            将此 System.Drawing.RectangleF 放大指定量。
+            </summary>
+            <param name="size">此矩形的放大量。</param>
+        </member>
+        <member name="M:Mobot.RectangleD.Inflate(Mobot.RectangleD,System.Double,System.Double)">
+            <summary>
+            创建并返回指定 System.Drawing.RectangleF 结构的放大副本。该副本被放大指定的量，并且不修改原始矩形。
+            </summary>
+            <param name="rect">要复制的 System.Drawing.RectangleF。不修改此矩形。</param>
+            <param name="x">矩形副本的水平放大量。</param>
+            <param name="y">矩形副本的垂直放大量。</param>
+            <returns>放大的 System.Drawing.RectangleF。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.Intersect(Mobot.RectangleD)">
+            <summary>
+            将此 System.Drawing.RectangleF 结构替换为其自身与指定的 System.Drawing.RectangleF 结构的交集。
+            </summary>
+            <param name="rect">要相交的矩形。</param>
+        </member>
+        <member name="M:Mobot.RectangleD.Intersect(Mobot.RectangleD,Mobot.RectangleD)">
+            <summary>
+            返回表示两个矩形的交集的 System.Drawing.RectangleF 结构。如果没有重叠，将返回一个空的 System.Drawing.RectangleF。
+            </summary>
+            <param name="a">要相交的矩形。</param>
+            <param name="b">要相交的矩形。</param>
+            <returns>第三个 System.Drawing.RectangleF 结构，它的大小表示两个指定矩形的重叠区域。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.IntersectsWith(Mobot.RectangleD)">
+            <summary>
+            确定此矩形是否与 rect 相交。
+            </summary>
+            <param name="rect">要测试的矩形。</param>
+            <returns>如果有交集，则此方法返回 true。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.Union(Mobot.RectangleD,Mobot.RectangleD)">
+            <summary>
+            创建第三个矩形，它是能够同时包含形成并集的两个矩形的可能的最小矩形。
+            </summary>
+            <param name="a">要合并的矩形。</param>
+            <param name="b">要合并的矩形。</param>
+            <returns>第三个 System.Drawing.RectangleF 结构，其中同时包含形成并集的两个矩形。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.Offset(System.Drawing.PointF)">
+            <summary>
+            将此矩形的位置调整指定的量。
+            </summary>
+            <param name="pos">偏移该位置的量。</param>
+        </member>
+        <member name="M:Mobot.RectangleD.Offset(System.Double,System.Double)">
+            <summary>
+            将此矩形的位置调整指定的量。
+            </summary>
+            <param name="x">水平偏移该位置的量。</param>
+            <param name="y">垂直偏移该位置的量。</param>
+        </member>
+        <member name="M:Mobot.RectangleD.op_Implicit(System.Drawing.Rectangle)~Mobot.RectangleD">
+            <summary>
+            将指定的 System.Drawing.Rectangle 结构转换为 System.Drawing.RectangleF 结构。
+            </summary>
+            <param name="r">要转换的 System.Drawing.Rectangle 结构。</param>
+            <returns>从指定的 System.Drawing.Rectangle 结构转换的 System.Drawing.RectangleF 结构。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.ToString">
+            <summary>
+            将此 System.Drawing.RectangleF 的 Location 和 System.Drawing.Size 转换为可读字符串。
+            </summary>
+            <returns>包含此 System.Drawing.RectangleF 结构的位置、宽度和高度的字符串，例如“{X=20, Y=20, Width=100, Height=50}”。</returns>
+        </member>
+        <member name="M:Mobot.RectangleD.Parse(System.String)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <returns>与 s 中包含的数字等效的 32 位有符号整数。</returns>
+            <exception cref="T:System.ArgumentNullException">s 为 null。</exception>
+            <exception cref="T:System.FormatException">s 的格式不正确。</exception>
+            <exception cref="T:System.OverflowException">s 表示小于 System.Int32.MinValue 或大于 System.Int32.MaxValue 的数字。</exception>
+        </member>
+        <member name="M:Mobot.RectangleD.TryParse(System.String,Mobot.RectangleD@)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。一个指示转换是否成功的返回值。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <param name="result">当此方法返回时，如果转换成功，则包含与 s 所包含的数字等效的 32 位有符号整数值；如果转换失败，则包含零。如果 s 参数为 null，格式不正确，或者表示的数字小于
+            System.Int32.MinValue 或大于 System.Int32.MaxValue，则转换会失败。该参数未经初始化即被传递。</param>
+            <returns>如果 s 转换成功，则为 true；否则为 false。</returns>
+        </member>
+        <member name="P:Mobot.RectangleD.Location">
+            <summary>
+            获取或设置此 System.Drawing.RectangleF 结构左上角的坐标。
+            </summary>
+            <value>System.Drawing.PointF，它表示此 System.Drawing.RectangleF 结构的左上角。</value>
+        </member>
+        <member name="P:Mobot.RectangleD.Size">
+            <summary>
+            获取或设置此 System.Drawing.RectangleF 的大小。
+            </summary>
+            <value>System.Drawing.SizeF，它表示此 System.Drawing.RectangleF 结构的宽度和高度。</value>
+        </member>
+        <member name="P:Mobot.RectangleD.X">
+            <summary>
+            获取或设置此 System.Drawing.RectangleF 结构左上角的 x 坐标。
+            </summary>
+            <value>此 System.Drawing.RectangleF 结构左上角的 x 坐标。默认值为 0。</value>
+        </member>
+        <member name="P:Mobot.RectangleD.Y">
+            <summary>
+            获取或设置此 System.Drawing.RectangleF 结构左上角的 y 坐标。
+            </summary>
+            <value>此 System.Drawing.RectangleF 结构左上角的 y 坐标。默认值为 0。</value>
+        </member>
+        <member name="P:Mobot.RectangleD.Width">
+            <summary>
+            获取或设置此 System.Drawing.RectangleF 结构的宽度。
+            </summary>
+            <value>此 System.Drawing.RectangleF 结构的宽度。默认值为 0。</value>
+        </member>
+        <member name="P:Mobot.RectangleD.Height">
+            <summary>
+             获取或设置此 System.Drawing.RectangleF 结构的高度。
+            </summary>
+            <value>此 System.Drawing.RectangleF 结构的高度。默认值为 0。</value>
+        </member>
+        <member name="P:Mobot.RectangleD.Left">
+            <summary>
+            获取此 System.Drawing.RectangleF 结构左边缘的 x 坐标。
+            </summary>
+            <value>此 System.Drawing.RectangleF 结构左边缘的 x 坐标。</value>
+        </member>
+        <member name="P:Mobot.RectangleD.Top">
+            <summary>
+            获取此 System.Drawing.RectangleF 结构上边缘的 y 坐标。
+            </summary>
+            <value>此 System.Drawing.RectangleF 结构上边缘的 y 坐标。</value>
+        </member>
+        <member name="P:Mobot.RectangleD.Right">
+            <summary>
+            获取 x 坐标，该坐标是此 System.Drawing.RectangleF 结构的 System.Drawing.RectangleF.X 与
+            System.Drawing.RectangleF.Width 之和。
+            </summary>
+            <value>x 坐标，该坐标是此 System.Drawing.RectangleF 结构的 System.Drawing.RectangleF.X 与 System.Drawing.RectangleF.Width
+            之和。</value>
+        </member>
+        <member name="P:Mobot.RectangleD.Bottom">
+            <summary>
+            获取 y 坐标，该坐标是此 System.Drawing.RectangleF 结构的 System.Drawing.RectangleF.Y 与
+            System.Drawing.RectangleF.Height 之和。
+            </summary>
+            <value>y 坐标，该坐标是此 System.Drawing.RectangleF 结构的 System.Drawing.RectangleF.Y 与 System.Drawing.RectangleF.Height
+            之和。</value>
+        </member>
+        <member name="P:Mobot.RectangleD.IsEmpty">
+            <summary>
+            测试此 System.Drawing.RectangleF 的 System.Drawing.RectangleF.Width 或 System.Drawing.RectangleF.Height
+            属性的值是否为零。
+            </summary>
+            <value>如果此 System.Drawing.RectangleF 的 System.Drawing.RectangleF.Width 或 System.Drawing.RectangleF.Height
+            属性的值为零，此属性将返回 true；否则将返回 false。</value>
+        </member>
+        <member name="M:Mobot.Point3D.op_Explicit(Mobot.Point3D)~Mobot.Point3">
+            <summary>
+            Point3D -> Point3 会损失精度。
+            </summary>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Point3D.ToString">
+            <summary>
+            返回 (0.0, 0.0, 0.0) 格式的字符串。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Utils.Logging.ExecuteErrorEventArgs">
+            <summary>
+            为 IEventSource.ErrorRaised 事件提供数据。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Logging.LazyFormattedExecuteEventArgs">
+            <summary>
+            存储表示消息的各个部分的字符串，该消息将延迟格式设置直至需要显示它。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Logging.LazyFormattedExecuteEventArgs.#ctor">
+            <summary>
+            默认构造函数。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Logging.LazyFormattedExecuteEventArgs.#ctor(System.String,System.String,System.String,System.DateTime,System.Object[])">
+            <summary>
+            此允许延迟设置格式的消息参数的构造函数。
+            </summary>
+            <param name="message">文本消息。</param>
+            <param name="helpKeyword">帮助关键字。</param>
+            <param name="senderName">事件发送方的名称。</param>
+            <param name="eventTimestamp">表示事件的创建时间的时间戳。</param>
+            <param name="messageArgs">消息参数。</param>
+        </member>
+        <member name="M:Mobot.Utils.Logging.LazyFormattedExecuteEventArgs.#ctor(System.String,System.String,System.String)">
+            <summary>
+            此构造函数允许初始化所有事件数据。
+            </summary>
+            <param name="message">文本消息。</param>
+            <param name="helpKeyword">帮助关键字。</param>
+            <param name="senderName">事件发送方的名称。</param>
+        </member>
+        <member name="P:Mobot.Utils.Logging.LazyFormattedExecuteEventArgs.Message">
+            <summary>
+            获取已设置格式的消息。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteErrorEventArgs.#ctor(System.String,System.Int64,System.String,System.String,System.String,System.String,System.DateTime,System.Object[])">
+            <summary>
+            此允许设置时间戳的构造函数
+            </summary>
+            <param name="subcategory">事件子类别</param>
+            <param name="code">事件代码</param>
+            <param name="testCaseName">与事件关联的文件</param>
+            <param name="lineNumber">行号（如果不适用，则为 0）</param>
+            <param name="columnNumber">列号（如果不适用，则为 0）</param>
+            <param name="endLineNumber">结尾行号（如果不适用，则为 0）</param>
+            <param name="endColumnNumber">结尾列号（如果不适用，则为 0）</param>
+            <param name="message">文本消息</param>
+            <param name="helpKeyword">帮助关键字</param>
+            <param name="senderName">事件发送方的名称</param>
+            <param name="eventTimestamp">表示事件的创建时间的时间戳</param>
+            <param name="messageArgs">消息参数</param>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteErrorEventArgs.#ctor(System.String,System.Int64,System.String,System.String,System.String,System.String)">
+            <summary>
+            用指定的 BuildErrorEventArgs.SubCategory、BuildErrorEventArgs.ErrorCode、BuildErrorEventArgs.TestCaseName、BuildEventArgs.Message、BuildEventArgs.HelpKeyword
+            和 BuildEventArgs.SenderName 值初始化 BuildErrorEventArgs
+            类的新实例。
+            </summary>
+            <param name="subcategory">事件的自定义子类别。</param>
+            <param name="code">事件的错误代码。</param>
+            <param name="testCaseName">与事件关联的文件的名称。</param>
+            <param name="message">事件的文本。</param>
+            <param name="helpKeyword">与事件关联的“帮助”关键字。</param>
+            <param name="senderName">事件源。</param>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteErrorEventArgs.#ctor">
+            <summary>
+            初始化 BuildErrorEventArgs 类的新实例。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteErrorEventArgs.Subcategory">
+            <summary>
+            获取事件的自定义子类型。
+            </summary>
+            <value>事件的自定义子类型。</value>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteErrorEventArgs.Code">
+            <summary>
+            获取事件的错误代码。
+            </summary>
+            <value>事件的错误代码。</value>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteErrorEventArgs.TestCaseName">
+            <summary>
+            获取引发事件的文件的名称。
+            </summary>
+            <value>引发事件的文件的名称。</value>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteErrorEventArgs.ProjectFile">
+            <summary>
+            获取或设置发出此事件的项目文件的名称。
+            </summary>
+            <value>返回发出此事件的项目文件的名称。</value>
+        </member>
+        <member name="T:Mobot.Utils.Logging.ConsoleLogger">
+            <summary>
+            表示将事件数据输出到控制台 (stdout) 的默认记录器。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Logging.ILogger">
+            <summary>
+            Defines an MSBuild logger, which subscribes to build system events.
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ILogger.Initialize(Mobot.Utils.Logging.IEventSource)">
+            <summary>
+            为记录器订阅特定事件。如果该记录器注册到生成引擎中，将在引发任何事件之前调用该方法。
+            </summary>
+            <param name="eventSource">记录器可用的事件。</param>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ILogger.Shutdown(Mobot.Utils.Logging.IEventSource)">
+            <summary>
+            释放在初始化时或在生成期间分配给记录器的资源。如果从引擎中注销该记录器，将在引发所有事件后调用该方法。
+            A host of MSBuild typically unregisters loggers immediately before quitting.
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ILogger.Parameters">
+            <summary>
+            获取或设置记录器的用户定义参数。
+            </summary>
+            <value>记录器参数。</value>
+        </member>
+        <member name="M:Mobot.Common.GetRotateAngle(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            两个向量之间的旋转角
+            http://old.blog.edu.cn/user2/43845/archives/2007/1729518.shtml
+            </summary>
+            <param name="x1"></param>
+            <param name="y1"></param>
+            <param name="x2"></param>
+            <param name="y2"></param>
+            <returns></returns>
+            <remarks><![CDATA[
+            首先明确几个数学概念：
+            1. 极轴沿逆时针转动的方向是正方向
+            2. 两个向量之间的夹角theta， 是指(A^B)/(|A|*|B|) = cos(theta)，0<=theta<=180 度， 而且没有方向之分
+            3. 两个向量的旋转角，是指从向量p1开始，逆时针旋转，转到向量p2时，所转过的角度， 范围是 0 ~ 360度
+            计算向量p1到p2的旋转角，算法如下：
+            首先通过点乘和arccosine的得到两个向量之间的夹角
+            然后判断通过差乘来判断两个向量之间的位置关系
+            如果p2在p1的顺时针方向, 返回arccose的角度值, 范围0 ~ 180.0(根据右手定理,可以构成正的面积)
+            否则返回 360.0 - arecose的值, 返回180到360(根据右手定理,面积为负)
+            ]]>
+            </remarks>
+        </member>
+        <member name="M:Mobot.Common.GetLocationAfterRotate(System.Drawing.Point,System.Double,System.Drawing.Point)">
+            <summary>
+            计算一点绕 指定一点 顺时针旋转角度a后的新坐标。
+            </summary>
+            <param name="pointDot">圆点坐标</param>
+            <param name="radian">旋转的度数（弧度）</param>
+            <param name="location">旋转前的位置。</param>
+            <returns></returns>
+            <remarks>
+            点A(x,y),绕原点,顺时针旋转角度a新坐标:
+            x1=x*cos(a)+y*sin(a)
+            y1=y*cos(a)-x*sin(a)
+            </remarks>
+        </member>
+        <member name="T:Mobot.Utils.Caches.ICacheEntry">
+            <summary>
+            缓存项。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Caches.ICacheEntry.ByteCount">
+            <summary>
+            存储需要预分配的最小空间，务必不小于实际使用大小。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Caches.ScreenEntry.ByteCount">
+            <summary>
+            获取存储该结构占用的空间。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Caches.WriteBytes`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="stream">共享内存流，可读写长度为预分配的尺寸。</param>
+            <param name="data">The data.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Utils.Caches.ReadBytes`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="stream">共享内存流，可读写长度为预分配的尺寸。</param>
+            <param name="length">The length.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Utils.Caches.CircleCacheData">
+            <summary>
+            数据段。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleCacheData.DataStart">
+            <summary>
+            有效数据段开始位置。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleCacheData.DataEnd">
+            <summary>
+            有效数据段结束位置。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Caches.CircleCacheData.ReleaseSpace(System.Int32)">
+            <summary>
+            删除一部分项，以便容纳新项
+            </summary>
+            <param name="byteCount"></param>
+        </member>
+        <member name="P:Mobot.Utils.Caches.CircleCacheData.DataSize">
+            <summary>
+            有效数据段的长度。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Communication.NamedPipeClient`2">
+            <summary>
+            通过命名管道进行通信，使用Client请求、Server响应的机制。
+            </summary>
+            <typeparam name="TRequest"></typeparam>
+            <typeparam name="TResponse"></typeparam>
+        </member>
+        <member name="M:Mobot.Utils.Communication.NamedPipeClient`2.GetSupportedResponseMessages">
+            <summary>
+            获取受支持的所有消息类型。
+            </summary>
+            <returns>
+            Key: MessageId
+            Value: MessageType 必须从 T 派生。
+            </returns>
+        </member>
+        <member name="P:Mobot.Utils.Communication.NamedPipeClient`2.ConnectTimeout">
+            <summary>
+            获取或设置一个值（以毫秒为单位），该值确定流在超时前尝试读取多长时间。
+            </summary>
+            <value>一个确定流在超时前尝试读取多长时间的值（以毫秒为单位）。</value>
+        </member>
+        <member name="P:Mobot.Utils.Communication.NamedPipeClient`2.ReadTimeout">
+            <summary>
+            获取或设置一个值（以毫秒为单位），该值确定流在超时前尝试读取多长时间。
+            </summary>
+            <value>一个确定流在超时前尝试读取多长时间的值（以毫秒为单位）。</value>
+        </member>
+        <member name="P:Mobot.Utils.Communication.NamedPipeClient`2.WriteTimeout">
+            <summary>
+            获取或设置一个值（以毫秒为单位），该值确定流在超时前尝试写入多长时间。
+            </summary>
+            <value>一个确定流在超时前尝试写入多长时间的值（以毫秒为单位）。</value>
+        </member>
+        <member name="P:Mobot.Utils.Communication.NamedPipeClient`2.ReconnectAfterBreakUp">
+            <summary>
+            操作过程中断开，则自动重连。默认为 True 。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Communication.NamedPipeClient`2.ReconnectRetryCount">
+            <summary>
+            操作过程中断开，尝试重连的次数。默认为 3 。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Communication.NamedPipeClient`2.ReconnectInterval">
+            <summary>
+            操作过程中断开，尝试重连的时间间隔（毫秒）。默认为 5000 。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Communication.NamedPipeClient`2.ResendAfterConnectionRecovery">
+            <summary>
+            当连接恢复后，重发请求。默认为 True。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Communication.NamedPipeClient`2.PipeName">
+            <summary>
+            管道的名称。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.BitConverterEx.IsLittleEndian">
+            <summary>
+            指示数据在此计算机结构中存储时的字节顺序（“Endian”性质）。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.BitConverterEx.GetBytes(System.Boolean)">
+            <summary>
+            返回由字节数组中指定位置的八个字节转换来的 64 位有符号整数。
+            </summary>
+            <param name="value">字节数组。</param>
+            <param name="startIndex">value 内的起始位置。</param>
+            <returns>由八个字节构成、从 startIndex 开始的 64 位有符号整数。</returns>
+            <exception cref="T:System.ArgumentException">startIndex 大于等于 value 减 7 的长度，且小于等于 value 减 1 的长度。</exception>
+            <exception cref="T:System.ArgumentNullException">value 为 null。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">startIndex 小于零或大于 value 减 1 的长度。</exception>
+        </member>
+        <member name="M:Mobot.Utils.BitConverterEx.ToBoolean(System.Byte[],System.Int32)">
+            <summary>
+            与 BitConverter.ToBoolean 的区别在于，当值为0xFF时，也视为false。
+            </summary>
+            <param name="value"></param>
+            <param name="startIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Size2">
+            <summary>
+            存储有序浮点数对，通常为矩形的宽度和高度。
+            </summary>
+        </member>
+        <member name="F:Mobot.Size2.Empty">
+            <summary>
+            获取 SizeF.Height 和 SizeF.Width 值为 0 的 SizeF 结构。
+            </summary>
+            <value>SizeF.Height 和 SizeF.Width 值为 0 的 SizeF 结构。</value>
+        </member>
+        <member name="M:Mobot.Size2.#ctor(Mobot.Size2)">
+            <summary>
+            根据指定的现有 SizeF 结构初始化 SizeF 结构的新实例。
+            </summary>
+            <param name="size">要从其中创建新 SizeF 结构的 SizeF 结构。</param>
+        </member>
+        <member name="M:Mobot.Size2.#ctor(Mobot.Point2)">
+            <summary>
+            根据指定的 PointF 结构初始化 SizeF 结构的新实例。
+            </summary>
+            <param name="pt">初始化此 SizeF 结构所依据的 PointF 结构。</param>
+        </member>
+        <member name="M:Mobot.Size2.#ctor(System.Int32,System.Int32)">
+            <summary>
+            根据指定的维度初始化 SizeF 结构的新实例。
+            </summary>
+            <param name="width">新 SizeF 结构的宽度分量。</param>
+            <param name="height">新 SizeF 结构的高度分量。</param>
+        </member>
+        <member name="M:Mobot.Size2.op_Addition(Mobot.Size2,Mobot.Size2)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度与另一个 SizeF 结构的宽度和高度相加。
+            </summary>
+            <param name="sz1">要相加的第一个 SizeF 结构。</param>
+            <param name="sz2">要相加的第二个 SizeF 结构。</param>
+            <returns>一个作为加法运算的结果的 Size 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2.op_Subtraction(Mobot.Size2,Mobot.Size2)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度从另一个 SizeF 结构的宽度和高度中减去。
+            </summary>
+            <param name="sz1">减法运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">减法运算符右侧的 SizeF 结构。</param>
+            <returns>SizeF，它是减法运算的结果。</returns>
+        </member>
+        <member name="M:Mobot.Size2.op_Equality(Mobot.Size2,Mobot.Size2)">
+            <summary>
+            测试两个 SizeF 结构是否相等。
+            </summary>
+            <param name="sz1">相等运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">相等运算符右侧的 SizeF 结构。</param>
+            <returns>如果 sz1 和 sz2 的宽度和高度均相等，则此运算符返回 true；否则返回 false。</returns>
+        </member>
+        <member name="M:Mobot.Size2.op_Inequality(Mobot.Size2,Mobot.Size2)">
+            <summary>
+            测试两个 SizeF 结构是否不同。
+            </summary>
+            <param name="sz1">不等运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">不等运算符右侧的 SizeF 结构。</param>
+            <returns>如果 sz1 和 sz2 的宽度或高度不同，则此运算符返回 true；如果 sz1 和 sz2 相等，则返回 false。</returns>
+        </member>
+        <member name="M:Mobot.Size2.op_Explicit(Mobot.Size2)~Mobot.Point2">
+            <summary>
+            将指定的 SizeF 结构转换为 PointF 结构。
+            </summary>
+            <param name="size">要转换的 SizeF 结构。</param>
+            <returns>此运算符要转换为的 PointF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2.Add(Mobot.Size2,Mobot.Size2)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度与另一个 SizeF 结构的宽度和高度相加。
+            </summary>
+            <param name="sz1">要相加的第一个 SizeF 结构。</param>
+            <param name="sz2">要相加的第二个 SizeF 结构。</param>
+            <returns>一个作为加法运算的结果的 SizeF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2.Subtract(Mobot.Size2,Mobot.Size2)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度从另一个 SizeF 结构的宽度和高度中减去。
+            </summary>
+            <param name="sz1">减法运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">减法运算符右侧的 SizeF 结构。</param>
+            <returns>一个作为减法运算的结果的 SizeF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2.Equals(System.Object)">
+            <summary>
+            测试指定的对象是否是一个与此 SizeF 结构具有相同维度的 SizeF 结构。
+            </summary>
+            <param name="obj">要测试的 System.Object。</param>
+            <returns>如果 obj 是一个 SizeF 并且与此 SizeF 具有相同的宽度和高度，则此方法返回
+            true；否则返回 false。</returns>
+        </member>
+        <member name="M:Mobot.Size2.GetHashCode">
+            <summary>
+            返回此 Size 结构的哈希代码。
+            </summary>
+            <returns>一个整数值，它指定此 Size 结构的哈希值。</returns>
+        </member>
+        <member name="M:Mobot.Size2.ToPoint2">
+            <summary>
+            将 SizeF 结构转换为 PointF 结构。
+            </summary>
+            <returns>返回一个 PointF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2.ToSize">
+            <summary>
+            将 SizeF 结构转换为 Size 结构。
+            </summary>
+            <returns>返回一个 Size 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2.ToString">
+            <summary>
+            创建一个表示此 SizeF 结构的可读字符串。
+            </summary>
+            <returns>表示此 SizeF 结构的字符串。</returns>
+        </member>
+        <member name="M:Mobot.Size2.Parse(System.String)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <returns>与 s 中包含的数字等效的 32 位有符号整数。</returns>
+            <exception cref="T:System.ArgumentNullException">s 为 null。</exception>
+            <exception cref="T:System.FormatException">s 的格式不正确。</exception>
+            <exception cref="T:System.OverflowException">s 表示小于 System.Int32.MinValue 或大于 System.Int32.MaxValue 的数字。</exception>
+        </member>
+        <member name="M:Mobot.Size2.TryParse(System.String,Mobot.Size2@)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。一个指示转换是否成功的返回值。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <param name="result">当此方法返回时，如果转换成功，则包含与 s 所包含的数字等效的 32 位有符号整数值；如果转换失败，则包含零。如果 s 参数为 null，格式不正确，或者表示的数字小于
+            System.Int32.MinValue 或大于 System.Int32.MaxValue，则转换会失败。该参数未经初始化即被传递。</param>
+            <returns>如果 s 转换成功，则为 true；否则为 false。</returns>
+        </member>
+        <member name="P:Mobot.Size2.IsEmpty">
+            <summary>
+            获取一个值，该值指示此 SizeF 结构的宽度和高度是否为零。
+            </summary>
+            <value>如果此 SizeF 结构的宽度和高度均为零，则此属性将返回 true；否则将返回 false。</value>
+        </member>
+        <member name="P:Mobot.Size2.Width">
+            <summary>
+            获取或设置此 SizeF 结构的水平分量。
+            </summary>
+            <value>此 SizeF 结构的水平分量，通常以像素为单位进行度量。</value>
+        </member>
+        <member name="P:Mobot.Size2.Height">
+            <summary>
+            获取或设置此 SizeF 结构的垂直分量。
+            </summary>
+            <value>此 SizeF 结构的垂直分量，通常以像素为单位进行度量。</value>
+        </member>
+        <member name="T:Mobot.SettingFile">
+            <summary>
+            实现固定长度配置文件读写。FixedLength
+            </summary>
+        </member>
+        <member name="M:Mobot.SettingFile.SetByteCount(System.Int32)">
+            <summary>
+            设置总长度，但不能少于已有数据长度。
+            </summary>
+        </member>
+        <member name="M:Mobot.SettingFile.Clear">
+            <summary>
+            擦除数据（用0填充）。
+            </summary>
+        </member>
+        <member name="M:Mobot.SettingFile.SetValue(System.String,System.Object)">
+            <summary>
+            写配置。
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Mobot.SettingFile.GetValue(System.String)">
+            <summary>
+            读取配置。
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.SettingFile.GetValue(System.String,System.Object)">
+            <summary>
+            读取值，如果读取失败则使用指定的默认值。
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Utils.Logging.MessageImportance">
+            <summary>
+            指定用于定义生成消息的重要性的常数。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Logging.MessageImportance.High">
+            <summary>
+            重要性较高的消息。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Logging.MessageImportance.Normal">
+            <summary>
+            重要性一般的消息。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Logging.MessageImportance.Low">
+            <summary>
+            重要性较低的消息。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteWarningEventArgs.#ctor(System.String,System.Int64,System.String,System.String,System.String,System.String,System.DateTime,System.Object[])">
+            <summary>
+            可使用此构造函数来设置时间戳
+            </summary>
+            <param name="subcategory">事件子类别</param>
+            <param name="code">事件代码</param>
+            <param name="testCaseName">与事件关联的文件</param>
+            <param name="lineNumber">行号（如果不适用，则为 0）</param>
+            <param name="columnNumber">列号（如果不适用，则为 0）</param>
+            <param name="endLineNumber">结尾行号（如果不适用，则为 0）</param>
+            <param name="endColumnNumber">结尾列号（如果不适用，则为 0）</param>
+            <param name="message">文本消息</param>
+            <param name="helpKeyword">帮助关键字</param>
+            <param name="senderName">事件发送方的名称</param>
+            <param name="eventTimestamp">事件的自定义时间戳</param>
+            <param name="messageArgs">消息参数</param>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteWarningEventArgs.#ctor(System.String,System.Int64,System.String,System.String,System.String,System.String)">
+            <summary>
+            用指定的 BuildWarningEventArgs.SubCategory、BuildWarningEventArgs.Code、BuildWarningEventArgs.TestCaseName、BuildEventArgs.Message、BuildEventArgs.HelpKeyword
+            和 BuildEventArgs.SenderName 值初始化 BuildWarningEventArgs
+            类的新实例。
+            </summary>
+            <param name="subcategory">事件的自定义子类别。</param>
+            <param name="code">事件的警告代码。</param>
+            <param name="testCaseName">与事件关联的文件的名称。</param>
+            <param name="message">事件的文本。</param>
+            <param name="helpKeyword">与事件关联的“帮助”关键字。</param>
+            <param name="senderName">事件源。</param>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteWarningEventArgs.Subcategory">
+            <summary>
+            获取事件的自定义子类别。
+            </summary>
+            <value>事件的自定义子类别。</value>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteWarningEventArgs.Code">
+            <summary>
+            获取事件的警告代码。
+            </summary>
+            <value>事件的警告代码。</value>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteWarningEventArgs.File">
+            <summary>
+            获取引发事件的文件的名称。
+            </summary>
+            <value>引发事件的文件的名称。</value>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteWarningEventArgs.ProjectFile">
+            <summary>
+            获取或设置发送消息时正在生成的项目。
+            </summary>
+            <value>返回发送消息时正在生成的项目。</value>
+        </member>
+        <member name="T:Mobot.Utils.Logging.ExecuteEventLog">
+            <summary>
+            由执行引擎引发的事件。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteEventLog.RegisterLogger(Mobot.Utils.Logging.ILogger)">
+            <summary>
+            向用于此集合中的项目生成的记录器集合添加给定的记录器。
+            </summary>
+            <param name="logger">要添加的记录器。</param>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteEventLog.RegisterLoggers(System.Collections.Generic.IEnumerable{Mobot.Utils.Logging.ILogger})">
+            <summary>
+            向用于此集合中的项目生成的记录器集合添加给定的记录器。
+            </summary>
+            <param name="loggers">要添加的记录器。可能为 null。</param>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteEventLog.UnregisterAllLoggers">
+            <summary>
+            移除由此集合中的项目生成使用的记录器集合中的所有记录器。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Communication.CommandMessages.RequestMessageId">
+            <summary>
+            客户端发出的消息。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.ZipHelper">
+            <summary>
+            辅助文件压缩。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.ZipHelper.GetAllFiles(System.String)">
+            <summary>
+            获取文件夹下的所有的文件及文件夹
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.ZipHelper.ZipFile(System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>
+            功能：压缩文件（暂时只压缩文件夹下一级目录中的文件，文件夹及其子级被忽略）
+            </summary>
+            <param name="inputDir">被压缩的文件夹夹路径</param>
+            <param name="zipFile">生成压缩文件的路径，为空则默认与被压缩文件夹同一级目录，名称为：文件夹名+.zip</param>
+            <param name="compressionLevel">压缩比</param>  
+            <param name="password">密码</param>  
+            <param name="comment">压缩文件注释文字</param>  
+            <returns>是否压缩成功</returns>
+        </member>
+        <member name="M:Mobot.Utils.ZipHelper.UnZipFile(System.String,System.String,System.String)">
+            <summary>
+            功能：解压zip格式的文件。
+            </summary>
+            <param name="zipFile">压缩文件的名称</param>
+            <param name="outputDir">解压文件存放路径,为空时默认与压缩文件同一级目录下，跟压缩文件同名的文件夹</param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteMessageEventArgs.#ctor(System.String,System.String,System.String,Mobot.Utils.Logging.MessageImportance,System.DateTime,System.Object[])">
+            <summary>
+            初始化 BuildMessageEventArgs 对象。
+            </summary>
+            <param name="message">消息文本。</param>
+            <param name="helpKeyword">要链接到帮助主题的关键字。</param>
+            <param name="senderName">事件发送方的名称。</param>
+            <param name="importance">消息的重要性</param>
+            <param name="eventTimestamp">与事件关联的日期和时间。</param>
+            <param name="messageArgs">消息参数。</param>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteMessageEventArgs.#ctor(System.String,System.String,System.String,Mobot.Utils.Logging.MessageImportance)">
+            <summary>
+            用指定的 BuildEventArgs.Message、BuildEventArgs.HelpKeyword、BuildEventArgs.SenderName
+            和 BuildMessageEventArgs.Importance 值初始化 BuildMessageEventArgs
+            类的新实例。
+            </summary>
+            <param name="message">事件的文本。</param>
+            <param name="helpKeyword">与事件关联的“帮助”关键字。</param>
+            <param name="senderName">事件源。</param>
+            <param name="importance">指示事件重要性的 MessageImportance 值。</param>
+        </member>
+        <member name="M:Mobot.Utils.Logging.ExecuteMessageEventArgs.#ctor">
+            <summary>
+            初始化 BuildMessageEventArgs 类的新实例。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Logging.ExecuteMessageEventArgs.Importance">
+            <summary>
+            获取事件的重要性。
+            </summary>
+            <value>指示事件重要性的 MessageImportance 值。</value>
+        </member>
+        <member name="M:Mobot.Utils.IO.PathEx.GetRefPath(System.String,System.String)">
+            <summary>
+            获取相对路径。
+            </summary>
+            <param name="basePath"></param>
+            <param name="fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Utils.Communication.MessageReceivedEventArgs`1">
+            <summary>
+            为 <see cref="!:"/> 事件提供数据。
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Mobot.Utils.Caches.CircleListProperties">
+            <summary>
+            列表的属性。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleListProperties.Capacity">
+            <summary>
+            列表的最大容量（项的最大数量）。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleListProperties.Count">
+            <summary>
+            项的当前数量。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleListProperties.StartIndex">
+            <summary>
+            列表中第一个项的索引。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleListProperties.BufferOffset">
+            <summary>
+            数据段的偏移位置.
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleListProperties.BufferSize">
+            <summary>
+            数据段的大小。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleListProperties.DataStart">
+            <summary>
+            有效数据段开始位置。（相对于Buffer）
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Caches.CircleCacheProperties">
+            <summary>
+            头信息，描述缓存的配置，通常固定不变。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleCacheProperties.CacheSize">
+            <summary>
+            整个缓存区域的大小。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleCacheProperties.ListOffset">
+            <summary>
+            项列表的偏移位置（相对整个Cache）
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleCacheProperties.ListSize">
+            <summary>
+            项列表的大小。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleCacheProperties.BufferOffset">
+            <summary>
+            数据段的偏移位置（相对整个Cache）
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleCacheProperties.BufferSize">
+            <summary>
+            数据段的大小。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Caches.RawImageEntry.ByteCount">
+            <summary>
+            获取存储该结构占用的空间。
+            </summary>
+        </member>
+        <member name="T:Mobot.Range">
+            <summary>
+            指一个范围。
+            </summary>
+        </member>
+        <member name="M:Mobot.Range.Parse(System.String)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <returns>与 s 中包含的数字等效的 32 位有符号整数。</returns>
+            <exception cref="T:System.ArgumentNullException">s 为 null。</exception>
+            <exception cref="T:System.FormatException">s 的格式不正确。</exception>
+            <exception cref="T:System.OverflowException">s 表示小于 System.Int32.MinValue 或大于 System.Int32.MaxValue 的数字。</exception>
+        </member>
+        <member name="M:Mobot.Range.TryParse(System.String,Mobot.Range@)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。一个指示转换是否成功的返回值。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <param name="result">当此方法返回时，如果转换成功，则包含与 s 所包含的数字等效的 32 位有符号整数值；如果转换失败，则包含零。如果 s 参数为 null，格式不正确，或者表示的数字小于
+            System.Int32.MinValue 或大于 System.Int32.MaxValue，则转换会失败。该参数未经初始化即被传递。</param>
+            <returns>如果 s 转换成功，则为 true；否则为 false。</returns>
+        </member>
+        <member name="T:Mobot.Utils.KeyValueSettings">
+            <summary>
+            基于键值对的配置存储类。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.KeyValueSettings.#ctor(System.Collections.Generic.IDictionary{System.String,System.String},System.Collections.Generic.IEqualityComparer{System.String})">
+            <summary>
+            构造函数。
+            </summary>
+            <param name="dictionary"></param>
+        </member>
+        <member name="M:Mobot.Utils.KeyValueSettings.#ctor(System.Collections.Generic.IEqualityComparer{System.String})">
+            <summary>
+            构造函数。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.KeyValueSettings.SetValue``1(System.String,``0)">
+            <summary>
+            设置值。
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Mobot.Utils.KeyValueSettings.GetValue``1(System.String)">
+            <summary>
+            获取值。
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.KeyValueSettings.GetValue``1(System.String,``0)">
+            <summary>
+            读取值，如果读取失败则使用指定的默认值。
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.KeyValueSettings.ToString">
+            <summary>
+            已重载。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.KeyValueSettings.WriteXml(System.String)">
+            <summary>
+            使用指定的文件以 XML 格式写入 System.Data.DataTable 的当前内容。
+            </summary>
+            <param name="fileName">要向其写入 XML 数据的文件。</param>
+        </member>
+        <member name="T:Mobot.IO.SequentialFile`2">
+            <summary>
+            实现对顺序文件的读写。
+            </summary>
+        </member>
+        <member name="F:Mobot.IO.SequentialFile`2.currentIndex">
+            <summary>
+            当前索引。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Communication.AnonymousPipeClient`2">
+            <summary>
+            通过匿名管道进行对等通信，Client和Server都可以主动发起消息。只能用于父子进程通信。
+            </summary>
+            <typeparam name="TWrite"></typeparam>
+            <typeparam name="TRead"></typeparam>
+        </member>
+        <member name="T:Mobot.Utils.Communication.BinaryCommunicator`2">
+            <summary>
+            跨进程间通信。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Communication.BinaryCommunicator`2.Send(`0)">
+            <summary>
+            如果发送失败，则会抛出异常。
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Mobot.Utils.Communication.BinaryCommunicator`2.GetSupportedReadMessages">
+            <summary>
+            获取受支持的所有消息类型。
+            </summary>
+            <returns>
+            Key: MessageId
+            Value: MessageType 必须从 T 派生。
+            </returns>
+        </member>
+        <member name="T:Mobot.Utils.Communication.NamedPipeServer`2">
+            <summary>
+            通过命名管道进行通信，使用Client请求、Server响应的机制。
+            </summary>
+            <typeparam name="TRequest"></typeparam>
+            <typeparam name="TResponse"></typeparam>
+        </member>
+        <member name="M:Mobot.Utils.Communication.NamedPipeServer`2.processMessage(System.Int32,`0)">
+            <summary>
+            获取受支持的所有消息类型。
+            </summary>
+            <param name="threadId">当前会话的线程ID，用于区分不同的会话。</param>
+            <param name="request">请求的消息。</param>
+            <returns>
+            Key: MessageId
+            Value: MessageType 必须从 T 派生。
+            </returns>
+        </member>
+        <member name="M:Mobot.Utils.Communication.NamedPipeServer`2.GetSupportedRequestMessages">
+            <summary>
+            获取受支持的所有消息类型。
+            </summary>
+            <returns>
+            Key: MessageId
+            Value: MessageType 必须从 T 派生。
+            </returns>
+        </member>
+        <member name="P:Mobot.Utils.Communication.NamedPipeServer`2.WaitTimeout">
+            <summary>
+            客户端连接闲置最大时间值（毫秒），默认为-1，无限长等待时间。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Communication.NamedPipeServer`2.MillisecondsTimeout">
+            <summary>
+            通信消息超时时间（毫秒），默认为10 * 1000。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Communication.NamedPipeServer`2.PipeName">
+            <summary>
+            管道的名称。
+            </summary>
+        </member>
+        <member name="E:Mobot.Utils.Communication.NamedPipeServer`2.ClientConnected">
+            <summary>
+            有客户端连接。
+            </summary>
+        </member>
+        <member name="E:Mobot.Utils.Communication.NamedPipeServer`2.ClientDisconnected">
+            <summary>
+            客户端断开。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Communication.CommandMessages.StopRequestMessage">
+            <summary>
+            用例取消。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Communication.CommandMessages.StopRequestMessage.RunGuid">
+            <summary>
+            用例的ID。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Threading.UIThreadState">
+            <summary>
+            指定 UIThread 的执行状态。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Threading.UIThreadState.Unstarted">
+            <summary>
+            尚未对线程调用 Start() 方法。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Threading.UIThreadState.Running">
+            <summary>
+            线程已启动。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Threading.UIThreadState.Stopped">
+            <summary>
+            线程已停止。
+            </summary>
+        </member>
+        <member name="T:Mobot.EventHelper">
+            <summary>
+            事件处理帮助程序。
+            </summary>
+        </member>
+        <member name="T:Mobot.DataRange">
+            <summary>
+            数据的空间区域。
+            </summary>
+        </member>
+        <member name="F:Mobot.DataRange.Offset">
+            <summary>
+            偏移位置（相对整个Cache）
+            </summary>
+        </member>
+        <member name="F:Mobot.DataRange.Size">
+            <summary>
+            大小（Bytes）。
+            </summary>
+        </member>
+        <member name="T:Mobot.ValueEventArgs`1">
+            <summary>
+            包含一个值的事件数据。
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Mobot.ValueEventArgs`1.#ctor(`0)">
+            <summary>
+            构造函数。
+            </summary>
+            <param name="value">事件数据</param>
+        </member>
+        <member name="P:Mobot.ValueEventArgs`1.Value">
+            <summary>
+            事件数据。
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.UInt8">
+            <summary>
+            1 Bytes
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.UInt16">
+            <summary>
+            2 Bytes
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.UInt32">
+            <summary>
+            4 Bytes
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.Int16">
+            <summary>
+            2 Bytes
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.Int32">
+            <summary>
+            4 Bytes
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.Int64">
+            <summary>
+            8 Bytes
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.Single">
+            <summary>
+            4 Bytes
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.Double">
+            <summary>
+            8 Bytes
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.DateTime">
+            <summary>
+            8 Bytes
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.Range">
+            <summary>
+            4*2 Bytes
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.Guid">
+            <summary>
+            16 Bytes
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.Bytes">
+            <summary>
+            需指定字段长度。
+            </summary>
+        </member>
+        <member name="F:Mobot.SettingType.String">
+            <summary>
+            需指定字段长度。
+            </summary>
+        </member>
+        <member name="M:Mobot.SettingHelper.FromBytes(Mobot.SettingType,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            将指定字节数组中的一个字节序列解码为一个指定类型的对象。
+            </summary>
+            <param name="type"></param>
+            <param name="bytes">包含要解码的字节序列的字节数组。</param>
+            <param name="index">第一个要解码的字节的索引。</param>
+            <param name="count">要解码的字节数。</param>
+            <returns>包含指定字节序列解码结果的 对象。</returns>
+        </member>
+        <member name="T:Mobot.Utils.Logging.RichTextBoxAppender">
+            <summary>
+            Description of RichTextBoxAppender.
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Logging.LevelTextStyle.ActivateOptions">
+            <summary>
+            Initialize the options for the object
+            </summary>
+            <remarks>Parse the properties</remarks>
+        </member>
+        <member name="F:Mobot.IO.IndexEntry.Offset">
+            <summary>
+            在缓存中的起始位置。
+            </summary>
+        </member>
+        <member name="F:Mobot.IO.IndexEntry.Length">
+            <summary>
+            字节数。
+            </summary>
+        </member>
+        <member name="F:Mobot.IO.IndexEntry.Timestamp">
+            <summary>
+            时间戳。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CacheItem.Offset">
+            <summary>
+            在缓存中的起始位置。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CacheItem.Length">
+            <summary>
+            字节数。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Caches.LogLevel">
+            <summary>
+            日志级别。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Caches.LogEntry">
+            <summary>
+            日志条目。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Caches.LogEntry.Level">
+            <summary>
+            日志的级别。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Caches.LogEntry.Message">
+            <summary>
+            日志消息。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Caches.LogEntry.Timestamp">
+            <summary>
+            日志生成时间。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Threading.UIThread">
+            <summary>
+            实现一个UI线程，可以在该线程执行方法。请务必在主线程初始化该类。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Threading.UIThread.Invoke(System.Delegate)">
+            <summary>
+            在拥有此控件的基础窗口句柄的线程上执行指定的委托。
+            </summary>
+            <param name="method">包含要在控件的线程上下文中调用的方法的委托。</param>
+            <returns>正在被调用的委托的返回值，或者如果委托没有返回值，则为 null。</returns>
+        </member>
+        <member name="M:Mobot.Utils.Threading.UIThread.Invoke(System.Delegate,System.Object[])">
+            <summary>
+            在拥有控件的基础窗口句柄的线程上，用指定的参数列表执行指定委托。
+            </summary>
+            <param name="method">一个方法委托，它采用的参数的数量和类型与 args 参数中所包含的相同。</param>
+            <param name="args">作为指定方法的参数传递的对象数组。如果此方法没有参数，该参数可以是 null。</param>
+            <returns>System.Object，它包含正被调用的委托返回值；如果该委托没有返回值，则为 null。</returns>
+        </member>
+        <member name="P:Mobot.Utils.Threading.UIThread.MainThreadWindowsContext">
+            <summary>
+            该进程主线程的控件。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Threading.UIThread.WindowsContext">
+            <summary>
+            该后台线程的控件。
+            </summary>
+        </member>
+        <member name="T:Mobot.RangeD">
+            <summary>
+            指一个范围。
+            </summary>
+        </member>
+        <member name="M:Mobot.RangeD.Parse(System.String)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <returns>与 s 中包含的数字等效的 32 位有符号整数。</returns>
+            <exception cref="T:System.ArgumentNullException">s 为 null。</exception>
+            <exception cref="T:System.FormatException">s 的格式不正确。</exception>
+            <exception cref="T:System.OverflowException">s 表示小于 System.Int32.MinValue 或大于 System.Int32.MaxValue 的数字。</exception>
+        </member>
+        <member name="M:Mobot.RangeD.TryParse(System.String,Mobot.RangeD@)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。一个指示转换是否成功的返回值。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <param name="result">当此方法返回时，如果转换成功，则包含与 s 所包含的数字等效的 32 位有符号整数值；如果转换失败，则包含零。如果 s 参数为 null，格式不正确，或者表示的数字小于
+            System.Int32.MinValue 或大于 System.Int32.MaxValue，则转换会失败。该参数未经初始化即被传递。</param>
+            <returns>如果 s 转换成功，则为 true；否则为 false。</returns>
+        </member>
+        <member name="P:Mobot.Utils.Caches.ImageEntry.ByteCount">
+            <summary>
+            获取存储该结构占用的空间。
+            </summary>
+        </member>
+        <member name="T:Mobot.KeyValueAttribute">
+            <summary>
+            指定属性或事件的说明。
+            </summary>
+        </member>
+        <member name="F:Mobot.KeyValueAttribute.Default">
+            <summary>
+            指定 <see cref="T:Mobot.KeyValueAttribute"/> 的默认值，即空字符串 ("")。此 static 字段是只读的。
+            </summary>
+        </member>
+        <member name="M:Mobot.KeyValueAttribute.#ctor">
+            <summary>
+            不带参数初始化 <see cref="T:Mobot.KeyValueAttribute"/> 类的新实例。
+            </summary>
+        </member>
+        <member name="M:Mobot.KeyValueAttribute.#ctor(System.String)">
+            <summary>
+            初始化 <see cref="T:Mobot.KeyValueAttribute"/> 类的新实例并带有说明。
+            </summary>
+            <param name="key">说明文本。</param>
+        </member>
+        <member name="M:Mobot.KeyValueAttribute.#ctor(System.String,System.String)">
+            <summary>
+            初始化 <see cref="T:Mobot.KeyValueAttribute"/> 类的新实例并带有说明。
+            </summary>
+            <param name="key">说明文本。</param>
+        </member>
+        <member name="M:Mobot.KeyValueAttribute.Equals(System.Object)">
+            <summary>
+            返回给定对象的值是否等于当前的 <see cref="T:Mobot.KeyValueAttribute"/>。
+            </summary>
+            <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
+            <returns>
+            如果给定对象的值等于当前对象的值，则为 <c>true</c>；否则为 <c>false</c>。
+            </returns>
+        </member>
+        <member name="M:Mobot.KeyValueAttribute.IsDefaultAttribute">
+            <summary>
+            返回一个值，该值指示这是否为默认 <see cref="T:Mobot.KeyValueAttribute"/> 实例。
+            </summary>
+            <returns>如果这是默认 <see cref="T:Mobot.KeyValueAttribute"/> 实例，则为 true；否则为 false。</returns>
+        </member>
+        <member name="P:Mobot.KeyValueAttribute.Key">
+            <summary>
+            获取存储在此特性中的说明。
+            </summary>
+            <value>
+            存储在此特性中的说明。
+            </value>
+        </member>
+        <member name="T:Mobot.Utils.IO.SerialPort">
+            <summary>
+            实现 System.IO.Ports.SerialPort 封装，以监控串口的变化。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.GetBauRates">
+            <summary>
+            获取常用的串口比特率。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.Close">
+            <summary>
+            关闭端口连接，将 <see cref="P:System.IO.Ports.SerialPort.IsOpen"/> 属性设置为 false，并释放内部 <see cref="T:System.IO.Stream"/> 对象。
+            </summary>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <PermissionSet>
+            	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+            </PermissionSet>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.Open">
+            <summary>
+            打开一个新的串行端口连接。
+            </summary>
+            <exception cref="T:System.InvalidOperationException">指定的端口已打开。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">此实例的一个或多个属性无效。例如，<see cref="P:System.IO.Ports.SerialPort.Parity"/>、<see cref="P:System.IO.Ports.SerialPort.DataBits"/> 或 <see cref="P:System.IO.Ports.SerialPort.Handshake"/> 属性不是有效值；<see cref="P:System.IO.Ports.SerialPort.BaudRate"/> 小于或等于零；<see cref="P:System.IO.Ports.SerialPort.ReadTimeout"/> 或 <see cref="P:System.IO.Ports.SerialPort.WriteTimeout"/> 属性小于零且不是 <see cref="F:System.IO.Ports.SerialPort.InfiniteTimeout"/>。</exception>
+            <exception cref="T:System.ArgumentException">端口名称不是以“COM”开始的。- 或 -端口的文件类型不受支持。</exception>
+            <exception cref="T:System.IO.IOException">此端口处于无效状态。 - 或 - 尝试设置基础端口状态失败。例如，从此 <see cref="T:System.IO.Ports.SerialPort"/> 对象传递的参数无效。</exception>
+            <exception cref="T:System.UnauthorizedAccessException">对端口的访问被拒绝。</exception>
+            <PermissionSet>
+            	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+            </PermissionSet>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            从 <see cref="T:System.IO.Ports.SerialPort"/> 输入缓冲区读取一些字节并将那些字节写入字节数组中指定的偏移量处。
+            </summary>
+            <param name="buffer">将输入写入到其中的字节数组。</param>
+            <param name="offset">缓冲区数组中开始写入的偏移量。</param>
+            <param name="count">要读取的字节数。</param>
+            <returns>读取的字节数。</returns>
+            <exception cref="T:System.ArgumentNullException">传递的 buffer 为 null。</exception>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            	<paramref name="offset"/> 或 <paramref name="count"/> 参数超出了所传递的 <paramref name="buffer"/> 的有效区域。<paramref name="offset"/> 或 <paramref name="count"/> 小于零。</exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="offset"/> 加上 <paramref name="count"/> 大于 <paramref name="buffer"/> 的长度。</exception>
+            <exception cref="T:System.TimeoutException">没有可以读取的字节。</exception>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.Read(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            从 <see cref="T:System.IO.Ports.SerialPort"/> 输入缓冲区中读取大量字符，然后将这些字符写入到一个字符数组中指定的偏移量处。
+            </summary>
+            <param name="buffer">将输入写入到其中的字符数组。</param>
+            <param name="offset">缓冲区数组中开始写入的偏移量。</param>
+            <param name="count">要读取的字符数。</param>
+            <returns>读取的字符数。</returns>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="offset"/> 加上 <paramref name="count"/> 大于缓冲区的长度。- 或 -<paramref name="count"/> 为 1 并且缓冲区中有一个代理项字符。</exception>
+            <exception cref="T:System.ArgumentNullException">传递的 <paramref name="buffer"/> 为 null。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            	<paramref name="offset"/> 或 <paramref name="count"/> 参数超出了所传递的 <paramref name="buffer"/> 的有效区域。<paramref name="offset"/> 或 <paramref name="count"/> 小于零。</exception>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <exception cref="T:System.TimeoutException">没有可以读取的字符。</exception>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.ReadByte">
+            <summary>
+            从 <see cref="T:System.IO.Ports.SerialPort"/> 输入缓冲区中同步读取一个字节。
+            </summary>
+            <returns>
+            强制转换为 <see cref="T:System.Int32"/> 的字节；或者，如果已读取到流的末尾，则为 -1。
+            </returns>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <exception cref="T:System.ServiceProcess.TimeoutException">该操作未在超时时间到期之前完成。- 或 -未读取任何字节。</exception>
+            <PermissionSet>
+            	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+            </PermissionSet>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.ReadChar">
+            <summary>
+            从 <see cref="T:System.IO.Ports.SerialPort"/> 输入缓冲区中同步读取一个字符。
+            </summary>
+            <returns>读取的字符。</returns>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <exception cref="T:System.ServiceProcess.TimeoutException">该操作未在超时时间到期之前完成。- 或 -在分配的超时时间内没有可用的字符。</exception>
+            <PermissionSet>
+            	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+            </PermissionSet>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.ReadExisting">
+            <summary>
+            在编码的基础上，读取 <see cref="T:System.IO.Ports.SerialPort"/> 对象的流和输入缓冲区中所有立即可用的字节。
+            </summary>
+            <returns>
+            	<see cref="T:System.IO.Ports.SerialPort"/> 对象的流和输入缓冲区的内容。
+            </returns>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <PermissionSet>
+            	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+            </PermissionSet>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.ReadLine">
+            <summary>
+            一直读取到输入缓冲区中的 <see cref="P:System.IO.Ports.SerialPort.NewLine"/> 值。
+            </summary>
+            <returns>
+            输入缓冲区中直到首次出现 <see cref="P:System.IO.Ports.SerialPort.NewLine"/> 值的内容。
+            </returns>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <exception cref="T:System.TimeoutException">该操作未在超时时间到期之前完成。- 或 -未读取任何字节。</exception>
+            <PermissionSet>
+            	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+            </PermissionSet>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.ReadTo(System.String)">
+            <summary>
+            一直读取到输入缓冲区中的指定 <paramref name="value"/> 的字符串。
+            </summary>
+            <param name="value">指示读取操作停止位置的值。</param>
+            <returns>
+            输入缓冲区中直到指定 <paramref name="value"/> 的内容。
+            </returns>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="value"/> 参数的长度为 0。</exception>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="value"/> 参数为 null。</exception>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <exception cref="T:System.TimeoutException">该操作未在超时时间到期之前完成。</exception>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.Write(System.String)">
+            <summary>
+            将指定的字符串写入串行端口。
+            </summary>
+            <param name="text">输出字符串。</param>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="str"/> 为 null。</exception>
+            <exception cref="T:System.ServiceProcess.TimeoutException">该操作未在超时时间到期之前完成。</exception>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            使用缓冲区的数据将指定数量的字节写入串行端口。
+            </summary>
+            <param name="buffer">包含要写入端口的数据的字节数组。</param>
+            <param name="offset"><paramref name="buffer"/> 参数中从零开始的字节偏移量，从此处开始将字节复制到端口。</param>
+            <param name="count">要写入的字节数。</param>
+            <exception cref="T:System.ArgumentNullException">传递的 <paramref name="buffer"/> 为 null。</exception>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            	<paramref name="offset"/> 或 <paramref name="count"/> 参数超出了所传递的 <paramref name="buffer"/> 的有效区域。<paramref name="offset"/> 或 <paramref name="count"/> 小于零。</exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="offset"/> 加上 <paramref name="count"/> 大于 <paramref name="buffer"/> 的长度。</exception>
+            <exception cref="T:System.ServiceProcess.TimeoutException">该操作未在超时时间到期之前完成。</exception>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.Write(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            使用缓冲区的数据将指定数量的字符写入串行端口。
+            </summary>
+            <param name="buffer">包含要写入端口的数据的字符数组。</param>
+            <param name="offset"><paramref name="buffer"/> 参数中从零开始的字节偏移量，从此处开始将字节复制到端口。</param>
+            <param name="count">要写入的字符数。</param>
+            <exception cref="T:System.ArgumentNullException">传递的 <paramref name="buffer"/> 为 null。</exception>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            	<paramref name="offset"/> 或 <paramref name="count"/> 参数超出了所传递的 <paramref name="buffer"/> 的有效区域。<paramref name="offset"/> 或 <paramref name="count"/> 小于零。</exception>
+            <exception cref="T:System.ArgumentException">
+            	<paramref name="offset"/> 加上 <paramref name="count"/> 大于 <paramref name="buffer"/> 的长度。</exception>
+            <exception cref="T:System.ServiceProcess.TimeoutException">该操作未在超时时间到期之前完成。</exception>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPort.WriteLine(System.String)">
+            <summary>
+            将指定的字符串和 <see cref="P:System.IO.Ports.SerialPort.NewLine"/> 值写入输出缓冲区。
+            </summary>
+            <param name="text">写入输出缓冲区的字符串。</param>
+            <exception cref="T:System.ArgumentNullException">
+            	<paramref name="str"/> 参数为 null。</exception>
+            <exception cref="T:System.InvalidOperationException">指定的端口未打开。</exception>
+            <exception cref="T:System.TimeoutException">
+            	<see cref="M:System.IO.Ports.SerialPort.WriteLine(System.String)"/> 方法无法写入流。 </exception>
+        </member>
+        <member name="E:Mobot.Utils.IO.SerialPort.SerialPortIO">
+            <summary>
+            Occurs when [serial port IO].
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Communication.AnonymousPipeServer`2">
+            <summary>
+            通过匿名管道进行对等通信，Client和Server都可以主动发起消息。只能用于父子进程通信。
+            </summary>
+            <typeparam name="TWrite"></typeparam>
+            <typeparam name="TRead"></typeparam>
+        </member>
+        <member name="T:Mobot.IO.IndexWriter`1">
+            <summary>
+            对索引文件的读写。
+            </summary>
+        </member>
+        <member name="T:Mobot.IO.IndexReader`1">
+            <summary>
+            对索引文件的读写。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Caches.EntryReceivedEventArgs`1">
+            <summary>
+            为 <see cref="!:"/> 事件提供数据。
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Mobot.Formatters.BinaryFormatter.Load``1(System.IO.BinaryReader)">
+            <summary>
+            要载入的类型务必有无参数的默认构造函数。
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Utils.Communication.CommandMessages.StopResponseMessage">
+            <summary>
+            取消测试 消息响应。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Communication.CommandMessages.StopResponseMessage.RunGuid">
+            <summary>
+            用例的ID。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Communication.CommandMessages.StopResponseMessage.IsReady">
+            <summary>
+            是否已准备好。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Communication.CommandMessages.StopResponseMessage.Reason">
+            <summary>
+            如果未准备好，则报告原因。
+            </summary>
+        </member>
+        <member name="T:Mobot.Size2F">
+            <summary>
+            存储有序浮点数对，通常为矩形的宽度和高度。
+            </summary>
+        </member>
+        <member name="F:Mobot.Size2F.Empty">
+            <summary>
+            获取 SizeF.Height 和 SizeF.Width 值为 0 的 SizeF 结构。
+            </summary>
+            <value>SizeF.Height 和 SizeF.Width 值为 0 的 SizeF 结构。</value>
+        </member>
+        <member name="M:Mobot.Size2F.#ctor(Mobot.Size2F)">
+            <summary>
+            根据指定的现有 SizeF 结构初始化 SizeF 结构的新实例。
+            </summary>
+            <param name="size">要从其中创建新 SizeF 结构的 SizeF 结构。</param>
+        </member>
+        <member name="M:Mobot.Size2F.#ctor(Mobot.Point2F)">
+            <summary>
+            根据指定的 PointF 结构初始化 SizeF 结构的新实例。
+            </summary>
+            <param name="pt">初始化此 SizeF 结构所依据的 PointF 结构。</param>
+        </member>
+        <member name="M:Mobot.Size2F.#ctor(System.Single,System.Single)">
+            <summary>
+            根据指定的维度初始化 SizeF 结构的新实例。
+            </summary>
+            <param name="width">新 SizeF 结构的宽度分量。</param>
+            <param name="height">新 SizeF 结构的高度分量。</param>
+        </member>
+        <member name="M:Mobot.Size2F.op_Addition(Mobot.Size2F,Mobot.Size2F)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度与另一个 SizeF 结构的宽度和高度相加。
+            </summary>
+            <param name="sz1">要相加的第一个 SizeF 结构。</param>
+            <param name="sz2">要相加的第二个 SizeF 结构。</param>
+            <returns>一个作为加法运算的结果的 Size 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.op_Subtraction(Mobot.Size2F,Mobot.Size2F)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度从另一个 SizeF 结构的宽度和高度中减去。
+            </summary>
+            <param name="sz1">减法运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">减法运算符右侧的 SizeF 结构。</param>
+            <returns>SizeF，它是减法运算的结果。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.op_Equality(Mobot.Size2F,Mobot.Size2F)">
+            <summary>
+            测试两个 SizeF 结构是否相等。
+            </summary>
+            <param name="sz1">相等运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">相等运算符右侧的 SizeF 结构。</param>
+            <returns>如果 sz1 和 sz2 的宽度和高度均相等，则此运算符返回 true；否则返回 false。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.op_Inequality(Mobot.Size2F,Mobot.Size2F)">
+            <summary>
+            测试两个 SizeF 结构是否不同。
+            </summary>
+            <param name="sz1">不等运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">不等运算符右侧的 SizeF 结构。</param>
+            <returns>如果 sz1 和 sz2 的宽度或高度不同，则此运算符返回 true；如果 sz1 和 sz2 相等，则返回 false。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.op_Explicit(Mobot.Size2F)~Mobot.Point2F">
+            <summary>
+            将指定的 SizeF 结构转换为 PointF 结构。
+            </summary>
+            <param name="size">要转换的 SizeF 结构。</param>
+            <returns>此运算符要转换为的 PointF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.Add(Mobot.Size2F,Mobot.Size2F)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度与另一个 SizeF 结构的宽度和高度相加。
+            </summary>
+            <param name="sz1">要相加的第一个 SizeF 结构。</param>
+            <param name="sz2">要相加的第二个 SizeF 结构。</param>
+            <returns>一个作为加法运算的结果的 SizeF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.Subtract(Mobot.Size2F,Mobot.Size2F)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度从另一个 SizeF 结构的宽度和高度中减去。
+            </summary>
+            <param name="sz1">减法运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">减法运算符右侧的 SizeF 结构。</param>
+            <returns>一个作为减法运算的结果的 SizeF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.Equals(System.Object)">
+            <summary>
+            测试指定的对象是否是一个与此 SizeF 结构具有相同维度的 SizeF 结构。
+            </summary>
+            <param name="obj">要测试的 System.Object。</param>
+            <returns>如果 obj 是一个 SizeF 并且与此 SizeF 具有相同的宽度和高度，则此方法返回
+            true；否则返回 false。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.GetHashCode">
+            <summary>
+            返回此 Size 结构的哈希代码。
+            </summary>
+            <returns>一个整数值，它指定此 Size 结构的哈希值。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.ToPoint2D">
+            <summary>
+            将 SizeF 结构转换为 PointF 结构。
+            </summary>
+            <returns>返回一个 PointF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.ToSize">
+            <summary>
+            将 SizeF 结构转换为 Size 结构。
+            </summary>
+            <returns>返回一个 Size 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.ToString">
+            <summary>
+            创建一个表示此 SizeF 结构的可读字符串。
+            </summary>
+            <returns>表示此 SizeF 结构的字符串。</returns>
+        </member>
+        <member name="M:Mobot.Size2F.Parse(System.String)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <returns>与 s 中包含的数字等效的 32 位有符号整数。</returns>
+            <exception cref="T:System.ArgumentNullException">s 为 null。</exception>
+            <exception cref="T:System.FormatException">s 的格式不正确。</exception>
+            <exception cref="T:System.OverflowException">s 表示小于 System.Int32.MinValue 或大于 System.Int32.MaxValue 的数字。</exception>
+        </member>
+        <member name="M:Mobot.Size2F.TryParse(System.String,Mobot.Size2F@)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。一个指示转换是否成功的返回值。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <param name="result">当此方法返回时，如果转换成功，则包含与 s 所包含的数字等效的 32 位有符号整数值；如果转换失败，则包含零。如果 s 参数为 null，格式不正确，或者表示的数字小于
+            System.Int32.MinValue 或大于 System.Int32.MaxValue，则转换会失败。该参数未经初始化即被传递。</param>
+            <returns>如果 s 转换成功，则为 true；否则为 false。</returns>
+        </member>
+        <member name="P:Mobot.Size2F.IsEmpty">
+            <summary>
+            获取一个值，该值指示此 SizeF 结构的宽度和高度是否为零。
+            </summary>
+            <value>如果此 SizeF 结构的宽度和高度均为零，则此属性将返回 true；否则将返回 false。</value>
+        </member>
+        <member name="P:Mobot.Size2F.Width">
+            <summary>
+            获取或设置此 SizeF 结构的水平分量。
+            </summary>
+            <value>此 SizeF 结构的水平分量，通常以像素为单位进行度量。</value>
+        </member>
+        <member name="P:Mobot.Size2F.Height">
+            <summary>
+            获取或设置此 SizeF 结构的垂直分量。
+            </summary>
+            <value>此 SizeF 结构的垂直分量，通常以像素为单位进行度量。</value>
+        </member>
+        <member name="T:Mobot.Utils.Communication.CommandType">
+            <summary>
+            命令类型。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Communication.CommandData.ToString">
+            <summary>
+            返回C语言样式的表达式语句。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Mobot.Utils.Communication.CommandData.InterfaceName">
+            <summary>
+            接口名称，可以留空。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.IO.SerialPortIOEventArgs">
+            <summary>
+            串口输入输出事件数据。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.IO.SerialPortIOEventArgs.#ctor(System.Boolean,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Mobot.Utils.IO.SerialPortIOEventArgs"/> class.
+            </summary>
+            <param name="isWriteToPort">if set to <c>true</c> [is write to port].</param>
+            <param name="data">The data.</param>
+        </member>
+        <member name="P:Mobot.Utils.IO.SerialPortIOEventArgs.WriteToPort">
+            <summary>
+            输入输出方向。
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.IO.SerialPortIOEventArgs.Data">
+            <summary>
+            输入输出的数据。
+            </summary>
+            <value>数据</value>
+        </member>
+        <member name="T:Mobot.Utils.Caches.CircleStream">
+            <summary>
+            对固定长度流的封装，读到末尾时跳到开头继续读写。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleStream.circleBufferSize">
+            <summary>
+            基础循环缓冲的大小。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleStream.windowOffset">
+            <summary>
+            操作窗口的偏移。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleStream.windowLength">
+            <summary>
+            操作窗口的大小。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.BitFormatter.FormatInt32(System.Byte[],System.Int32,System.Int64)">
+            <summary>
+            Convert basic data types into byte blocks.
+            HRESULT FormatLong(byte *pDest, int size, long Argument, long *BytesWritten);
+            </summary>
+            <param name="?"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Size2D">
+            <summary>
+            存储有序浮点数对，通常为矩形的宽度和高度。
+            </summary>
+        </member>
+        <member name="F:Mobot.Size2D.Empty">
+            <summary>
+            获取 SizeF.Height 和 SizeF.Width 值为 0 的 SizeF 结构。
+            </summary>
+            <value>SizeF.Height 和 SizeF.Width 值为 0 的 SizeF 结构。</value>
+        </member>
+        <member name="M:Mobot.Size2D.#ctor(Mobot.Size2D)">
+            <summary>
+            根据指定的现有 SizeF 结构初始化 SizeF 结构的新实例。
+            </summary>
+            <param name="size">要从其中创建新 SizeF 结构的 SizeF 结构。</param>
+        </member>
+        <member name="M:Mobot.Size2D.#ctor(Mobot.Point2D)">
+            <summary>
+            根据指定的 PointF 结构初始化 SizeF 结构的新实例。
+            </summary>
+            <param name="pt">初始化此 SizeF 结构所依据的 PointF 结构。</param>
+        </member>
+        <member name="M:Mobot.Size2D.#ctor(System.Double,System.Double)">
+            <summary>
+            根据指定的维度初始化 SizeF 结构的新实例。
+            </summary>
+            <param name="width">新 SizeF 结构的宽度分量。</param>
+            <param name="height">新 SizeF 结构的高度分量。</param>
+        </member>
+        <member name="M:Mobot.Size2D.op_Addition(Mobot.Size2D,Mobot.Size2D)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度与另一个 SizeF 结构的宽度和高度相加。
+            </summary>
+            <param name="sz1">要相加的第一个 SizeF 结构。</param>
+            <param name="sz2">要相加的第二个 SizeF 结构。</param>
+            <returns>一个作为加法运算的结果的 Size 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.op_Subtraction(Mobot.Size2D,Mobot.Size2D)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度从另一个 SizeF 结构的宽度和高度中减去。
+            </summary>
+            <param name="sz1">减法运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">减法运算符右侧的 SizeF 结构。</param>
+            <returns>SizeF，它是减法运算的结果。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.op_Equality(Mobot.Size2D,Mobot.Size2D)">
+            <summary>
+            测试两个 SizeF 结构是否相等。
+            </summary>
+            <param name="sz1">相等运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">相等运算符右侧的 SizeF 结构。</param>
+            <returns>如果 sz1 和 sz2 的宽度和高度均相等，则此运算符返回 true；否则返回 false。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.op_Inequality(Mobot.Size2D,Mobot.Size2D)">
+            <summary>
+            测试两个 SizeF 结构是否不同。
+            </summary>
+            <param name="sz1">不等运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">不等运算符右侧的 SizeF 结构。</param>
+            <returns>如果 sz1 和 sz2 的宽度或高度不同，则此运算符返回 true；如果 sz1 和 sz2 相等，则返回 false。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.op_Explicit(Mobot.Size2D)~Mobot.Point2D">
+            <summary>
+            将指定的 SizeF 结构转换为 PointF 结构。
+            </summary>
+            <param name="size">要转换的 SizeF 结构。</param>
+            <returns>此运算符要转换为的 PointF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.Add(Mobot.Size2D,Mobot.Size2D)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度与另一个 SizeF 结构的宽度和高度相加。
+            </summary>
+            <param name="sz1">要相加的第一个 SizeF 结构。</param>
+            <param name="sz2">要相加的第二个 SizeF 结构。</param>
+            <returns>一个作为加法运算的结果的 SizeF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.Subtract(Mobot.Size2D,Mobot.Size2D)">
+            <summary>
+            将一个 SizeF 结构的宽度和高度从另一个 SizeF 结构的宽度和高度中减去。
+            </summary>
+            <param name="sz1">减法运算符左侧的 SizeF 结构。</param>
+            <param name="sz2">减法运算符右侧的 SizeF 结构。</param>
+            <returns>一个作为减法运算的结果的 SizeF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.Equals(System.Object)">
+            <summary>
+            测试指定的对象是否是一个与此 SizeF 结构具有相同维度的 SizeF 结构。
+            </summary>
+            <param name="obj">要测试的 System.Object。</param>
+            <returns>如果 obj 是一个 SizeF 并且与此 SizeF 具有相同的宽度和高度，则此方法返回
+            true；否则返回 false。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.GetHashCode">
+            <summary>
+            返回此 Size 结构的哈希代码。
+            </summary>
+            <returns>一个整数值，它指定此 Size 结构的哈希值。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.ToPoint2D">
+            <summary>
+            将 SizeF 结构转换为 PointF 结构。
+            </summary>
+            <returns>返回一个 PointF 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.ToSize">
+            <summary>
+            将 SizeF 结构转换为 Size 结构。
+            </summary>
+            <returns>返回一个 Size 结构。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.ToString">
+            <summary>
+            创建一个表示此 SizeF 结构的可读字符串。
+            </summary>
+            <returns>表示此 SizeF 结构的字符串。</returns>
+        </member>
+        <member name="M:Mobot.Size2D.Parse(System.String)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <returns>与 s 中包含的数字等效的 32 位有符号整数。</returns>
+            <exception cref="T:System.ArgumentNullException">s 为 null。</exception>
+            <exception cref="T:System.FormatException">s 的格式不正确。</exception>
+            <exception cref="T:System.OverflowException">s 表示小于 System.Int32.MinValue 或大于 System.Int32.MaxValue 的数字。</exception>
+        </member>
+        <member name="M:Mobot.Size2D.TryParse(System.String,Mobot.Size2D@)">
+            <summary>
+            将数字的字符串表示形式转换为它的等效 32 位有符号整数。一个指示转换是否成功的返回值。
+            </summary>
+            <param name="s">包含要转换的数字的字符串。</param>
+            <param name="result">当此方法返回时，如果转换成功，则包含与 s 所包含的数字等效的 32 位有符号整数值；如果转换失败，则包含零。如果 s 参数为 null，格式不正确，或者表示的数字小于
+            System.Int32.MinValue 或大于 System.Int32.MaxValue，则转换会失败。该参数未经初始化即被传递。</param>
+            <returns>如果 s 转换成功，则为 true；否则为 false。</returns>
+        </member>
+        <member name="P:Mobot.Size2D.IsEmpty">
+            <summary>
+            获取一个值，该值指示此 SizeF 结构的宽度和高度是否为零。
+            </summary>
+            <value>如果此 SizeF 结构的宽度和高度均为零，则此属性将返回 true；否则将返回 false。</value>
+        </member>
+        <member name="P:Mobot.Size2D.Width">
+            <summary>
+            获取或设置此 SizeF 结构的水平分量。
+            </summary>
+            <value>此 SizeF 结构的水平分量，通常以像素为单位进行度量。</value>
+        </member>
+        <member name="P:Mobot.Size2D.Height">
+            <summary>
+            获取或设置此 SizeF 结构的垂直分量。
+            </summary>
+            <value>此 SizeF 结构的垂直分量，通常以像素为单位进行度量。</value>
+        </member>
+        <member name="T:Mobot.SettingItem">
+            <summary>
+            一个配置项的参数。
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.IO.BaudRate">
+            <summary>
+            Serial communication baudrate values
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_110">
+            <summary>
+            110 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_300">
+            <summary>
+            300 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_1200">
+            <summary>
+            1200 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_2400">
+            <summary>
+            2400 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_4800">
+            <summary>
+            4800 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_9600">
+            <summary>
+            9600 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_14400">
+            <summary>
+            14400 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_19200">
+            <summary>
+            19200 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_38400">
+            <summary>
+            38400 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_57600">
+            <summary>
+            57600 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_115200">
+            <summary>
+            115200 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_230400">
+            <summary>
+            230400 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_460800">
+            <summary>
+            460800 bits per second
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.IO.BaudRate.BaudRate_921600">
+            <summary>
+            921600 bits per second
+            </summary>
+        </member>
+        <member name="T:Mobot.Utils.Caches.EntryReceivedEventHandler`1">
+            <summary>
+            表示将处理不包含事件数据的事件的方法。
+            </summary>
+            <param name="sender">事件源。</param>
+            <param name="e">不包含任何事件数据的 System.EventArgs。</param>
+        </member>
+        <member name="T:Mobot.Utils.Caches.AbstractCircleList`1">
+            <summary>
+            固定大小的循环队列。当空间不足时，覆盖先入列的项。
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="F:Mobot.Utils.Caches.AbstractCircleList`1.accessor">
+            <summary>
+            对列表项的访问器。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Caches.AbstractCircleList`1.#ctor(System.IO.MemoryMappedFiles.MemoryMappedFile,System.Int32,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="mmf"></param>
+            <param name="offset"></param>
+            <param name="entryCount">允许存储的项的最大数量。</param>
+            <param name="readOnly">true:新建；false:使用共享内存数据初始化。</param>
+            <remarks>务必确保预分配的空间不小于 entryCount * entrySize。</remarks>
+        </member>
+        <member name="M:Mobot.Utils.Caches.AbstractCircleList`1.LoadHeader">
+            <summary>
+            从共享内存加载Header。
+            </summary>
+            <returns>返回修订号</returns>
+        </member>
+        <member name="M:Mobot.Utils.Caches.AbstractCircleList`1.GetBufferPostion(System.Int64)">
+            <summary>
+            获取读写的指针位置。
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.Caches.AbstractCircleList`1.CheckNewData">
+            <summary>
+            检查有无新数据，有则重新载入
+            </summary>
+        </member>
+        <member name="P:Mobot.Utils.Caches.AbstractCircleList`1.Range">
+            <summary>
+            当前列表中的索引范围。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Mobot.Utils.Caches.ReadOnlyCircleList`1">
+            <summary>
+            只读列表。
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Mobot.Utils.Caches.CircleList`1">
+            <summary>
+            可写列表。WritableCircleList
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Mobot.Utils.Caches.CircleList`1.Create(System.IO.MemoryMappedFiles.MemoryMappedFile,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="mmf"></param>
+            <param name="offset"></param>
+            <param name="entryCount"></param>
+            <returns>返回该结构占用的总空间（单位为Bytes）</returns>
+        </member>
+        <member name="F:Mobot.Utils.Caches.CircleList`1.lockObj">
+            <summary>
+            同时只允许一个线程执行修改动作。
+            </summary>
+        </member>
+        <member name="M:Mobot.Utils.Caches.CircleList`1.SaveHeader">
+            <summary>
+            将Header保存到共享内存。
+            </summary>
+            <returns>返回修订号</returns>
+        </member>
+        <member name="M:Mobot.Utils.Caches.CircleList`1.UpdateTick">
+            <summary>
+            更新Tick值。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.Communication.NamedPipeCommunicator`2.Read(System.Int32)">
+            <summary>
+            等待的毫秒数，或为 System.Threading.Timeout.Infinite (-1)，表示无限期等待。
+            </summary>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mobot.Utils.Communication.NamedPipeCommunicator`2.Write(`0,System.Int32)">
+            <summary>
+            等待的毫秒数，或为 System.Threading.Timeout.Infinite (-1)，表示无限期等待。
+            </summary>
+            <param name="message"></param>
+            <param name="timeout"></param>
+        </member>
+        <member name="F:Mobot.Utils.Communication.NamedPipeCommunicator`2.ReadState.Cancelled">
+            <summary>
+            指示操作已取消。
+            </summary>
+        </member>
+        <member name="F:Mobot.Utils.Communication.NamedPipeCommunicator`2.WriteState.Cancelled">
+            <summary>
+            指示操作已取消。
+            </summary>
+        </member>
+    </members>
+</doc>
